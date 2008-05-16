@@ -1,0 +1,888 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transformation>
+  <info>
+    <name>LOAD_MOVIES_LIST</name>
+    <description/>
+    <extended_description/>
+    <trans_version/>
+    <directory>&#47;</directory>
+    <log>
+      <read/>
+      <write/>
+      <input/>
+      <output/>
+      <update/>
+      <rejected/>
+      <connection/>
+      <table/>
+      <use_batchid>Y</use_batchid>
+      <use_logfield>N</use_logfield>
+    </log>
+    <maxdate>
+      <connection/>
+      <table/>
+      <field/>
+      <offset>0.0</offset>
+      <maxdiff>0.0</maxdiff>
+    </maxdate>
+    <size_rowset>10000</size_rowset>
+    <sleep_time_empty>50</sleep_time_empty>
+    <sleep_time_full>50</sleep_time_full>
+    <unique_connections>N</unique_connections>
+    <feedback_shown>Y</feedback_shown>
+    <feedback_size>50000</feedback_size>
+    <using_thread_priorities>N</using_thread_priorities>
+    <shared_objects_file/>
+    <dependencies>
+    </dependencies>
+    <partitionschemas>
+    </partitionschemas>
+    <slaveservers>
+    </slaveservers>
+    <clusterschemas>
+    </clusterschemas>
+  <modified_user>-</modified_user>
+  <modified_date>2007&#47;12&#47;19 00:13:11.131</modified_date>
+  </info>
+  <notepads>
+  </notepads>
+  <connection>
+    <name>imdb</name>
+    <server>127.0.0.1</server>
+    <type>MYSQL</type>
+    <access>Native</access>
+    <database>imdb</database>
+    <port>3351</port>
+    <username>root</username>
+    <password>Encrypted </password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>INITIAL_POOL_SIZE</code><attribute>5</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>MAXIMUM_POOL_SIZE</code><attribute>10</attribute></attribute>
+      <attribute><code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>3351</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <order>
+  <hop> <from>Movies.list</from><to>Extract Movies</to><enabled>Y</enabled> </hop>  <hop> <from>Select values 1</from><to>ods_movie</to><enabled>Y</enabled> </hop>  <hop> <from>CREATE ods_movie</from><to>Movies.list</to><enabled>Y</enabled> </hop>  <hop> <from>ods_movie</from><to>Movie  Errors</to><enabled>Y</enabled> </hop>  <hop> <from>Extract Movies</from><to>Select values 1</to><enabled>Y</enabled> </hop>  <hop> <from>Extract Movies</from><to>Text file output</to><enabled>N</enabled> </hop>  </order>
+  <step>
+    <name>CREATE ods_movie</name>
+    <type>ExecSQL</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>imdb</connection>
+    <execute_each_row>N</execute_each_row>
+    <replace_variables>N</replace_variables>
+    <sql>drop table if exists ods_movie;
+
+CREATE TABLE ods_movie (
+  movie       varchar(255) NOT NULL,
+  line_number mediumint    NOT NULL, 
+  title       varchar(255) NOT NULL,
+  subtitle    varchar(255) NOT NULL default &apos;&apos;,
+  episode     varchar(50)  NOT NULL default &apos;&apos;,
+  year        char(4)      NOT NULL,
+  part        char(5)      NOT NULL default &apos;&apos;,
+  type        enum(
+                &apos;television movie&apos;
+              , &apos;video game&apos;
+              , &apos;video&apos;
+              , &apos;mini-series&apos;
+              , &apos;television series&apos;
+              , &apos;cinematic movie&apos;
+              )            NOT NULL,
+  years       varchar(100) NOT NULL default &apos;&apos;,
+  extra       varchar(40)  NOT NULL default &apos;&apos;,
+  suspended   enum(
+                &apos;yes&apos;
+              , &apos;no&apos;
+              )            NOT NULL,
+  primary key(title,year,part,subtitle,episode,type)
+) 
+ENGINE=MyISAM 
+DEFAULT CHARSET=latin1
+DEFAULT COLLATE=latin1_general_cs
+;</sql>
+    <insert_field/>
+    <update_field/>
+    <delete_field/>
+    <read_field/>
+    <arguments>
+    </arguments>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>43</xloc>
+      <yloc>97</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Extract Movies</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>N</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>Y</compatible>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>
+var status= 0;
+var have_match= &quot;match&quot;;
+
+var movie_string= movie.getString();
+var movie_string_head= &apos;&apos;;
+var movie_years= &apos;&apos;;
+var extra_info= &apos;&apos;;
+
+var movie_title= &apos;&apos;;
+var movie_year= &apos;&apos;;
+var movie_part= &apos;&apos;;
+var type= &apos;&apos;;
+var movie_subtitle= &apos;&apos;;
+var suspended= &apos;&apos;;
+
+var movie_subtitle_text= &apos;&apos;;
+var movie_subtitle_episode= &apos;&apos;;
+
+if(
+  movie_string.match(
+    &#47;^([^\t]+)\t+(([^\t\(\)]+)(\t+\(([^\t]+)\))?)?$&#47;
+&#47;&#47;    1     \1   23         \34     5     \5 \4\2
+  )
+){
+  status= 1;
+  movie_string_head= RegExp.$1;
+  movie_years= RegExp.$3;
+  extra_info= RegExp.$5;
+  if(
+    movie_string_head.match(
+      &#47;^(.+) \(([0-9\?]{4})(\&#47;[IVX]+)?\)( \((TV|VG|V|mini)\))?( \{([^\{\}]+)\})?( \{\{SUSPENDED\}\})?$&#47;
+&#47;&#47;      1      2         \23       \3   4   5           \5 \4 6   7       \7 \6 8
+    )
+  ){
+    status= 2;    
+    movie_title= (title_quoted = (RegExp.$1.charAt(0)==&apos;&quot;&apos;))
+    ? RegExp.$1.substr(1, RegExp.$1.length -2)
+    : RegExp.$1
+    ;
+
+    movie_year= RegExp.$2;
+    movie_part= (RegExp.$3==&apos;&apos;)
+    ? &apos;&apos;
+    : RegExp.$3.substr(1);
+    ;
+
+    switch(RegExp.$5){
+      case &apos;TV&apos;:
+        type= &apos;television movie&apos;;
+        break;
+      case &apos;VG&apos;:
+        type= &apos;video game&apos;;
+        break;
+      case &apos;V&apos;:
+        type= &apos;video&apos;;
+        break;
+      case &apos;mini&apos;:
+        type= &apos;mini-series&apos;;
+        break;
+      default:
+        type= title_quoted
+        ? &apos;television series&apos;
+        : &apos;cinematic movie&apos;
+        ;
+    }
+    suspended= (RegExp.$8==&apos;&apos;?&apos;no&apos;:&apos;yes&apos;);
+
+    movie_subtitle= RegExp.$7;   
+    if(
+      movie_subtitle.match(
+        &#47;^([^\(]+)( \(([^\)]+)\))$&#47;
+&#47;&#47;        1 \12   3   \3 \2
+      )
+    ){
+      movie_subtitle_text= RegExp.$1;
+      movie_subtitle_episode= RegExp.$3;
+      status= 3;
+    } else if(
+      movie_subtitle.match(
+        &#47;^\(([^\)]+)\)$&#47;
+&#47;&#47;          1   \1
+      )
+    ){
+      status= 4;
+      movie_subtitle_text= &apos;&apos;;
+      movie_subtitle_episode= RegExp.$1;
+    } else {
+      status= 5;
+      movie_subtitle_text= movie_subtitle;
+      movie_subtitle_episode= &apos;&apos;;
+    }
+  } else {
+    have_match= &quot;no match&quot;;
+  }
+} else {
+  have_match= &quot;no match&quot;;
+}
+
+</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>status</name>
+        <rename>status</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+      </field>      <field>        <name>have_match</name>
+        <rename>have_match</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>movie_years</name>
+        <rename>years</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>extra_info</name>
+        <rename>extra</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>movie_title</name>
+        <rename>title</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>movie_year</name>
+        <rename>year</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>movie_part</name>
+        <rename>part</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>type</name>
+        <rename>type</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>suspended</name>
+        <rename>suspended</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>movie_subtitle_text</name>
+        <rename>subtitle</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>movie_subtitle_episode</name>
+        <rename>episode</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>259</xloc>
+      <yloc>90</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Movie  Errors</name>
+    <type>TextFileOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <separator>;</separator>
+    <enclosure>&quot;</enclosure>
+    <enclosure_forced>N</enclosure_forced>
+    <header>Y</header>
+    <footer>N</footer>
+    <format>DOS</format>
+    <compression>None</compression>
+    <encoding/>
+    <endedLine/>
+    <file>
+      <name>${Internal.Transformation.Filename.Directory}&#47;..&#47;errors&#47;movies</name>
+      <is_command>N</is_command>
+      <extention>txt</extention>
+      <append>N</append>
+      <split>N</split>
+      <haspartno>N</haspartno>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <pad>N</pad>
+      <fast_dump>N</fast_dump>
+      <splitevery>0</splitevery>
+      </file>
+    <fields>
+      <field>
+        <name>movie</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>line_number</name>
+        <type>Integer</type>
+        <format>0</format>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>years</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>extra</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>title</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>year</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>part</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>type</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>suspended</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>subtitle</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>episode</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>error_description</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>error_fields</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>error_codes</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>663</xloc>
+      <yloc>92</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Movies.list</name>
+    <type>TextFileInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <accept_filenames>N</accept_filenames>
+    <accept_field/>
+    <accept_stepname/>
+    <separator>;</separator>
+    <enclosure>&quot;</enclosure>
+    <enclosure_breaks>N</enclosure_breaks>
+    <escapechar/>
+    <header>Y</header>
+    <nr_headerlines>8</nr_headerlines>
+    <footer>Y</footer>
+    <nr_footerlines>2</nr_footerlines>
+    <line_wrapped>N</line_wrapped>
+    <nr_wraps>1</nr_wraps>
+    <layout_paged>N</layout_paged>
+    <nr_lines_per_page>80</nr_lines_per_page>
+    <nr_lines_doc_header>0</nr_lines_doc_header>
+    <noempty>Y</noempty>
+    <include>N</include>
+    <include_field/>
+    <rownum>Y</rownum>
+    <rownumByFile>N</rownumByFile>
+    <rownum_field>title_key</rownum_field>
+    <format>mixed</format>
+    <encoding>ISO-8859-1</encoding>
+    <file>
+      <name>${Internal.Transformation.Filename.Directory}&#47;..&#47;input&#47;movies.list.gz</name>
+      <filemask/>
+      <file_required/>
+      <type>Fixed</type>
+      <compression>GZip</compression>
+    </file>
+    <filters>
+    </filters>
+    <fields>
+      <field>
+        <name>movie</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <ifnull/>
+        <position>0</position>
+        <length>255</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+    </fields>
+    <limit>0</limit>
+    <error_ignored>N</error_ignored>
+    <error_line_skipped>N</error_line_skipped>
+    <error_count_field/>
+    <error_fields_field/>
+    <error_text_field/>
+    <bad_line_files_destination_directory/>
+    <bad_line_files_extension>warning</bad_line_files_extension>
+    <error_line_files_destination_directory/>
+    <error_line_files_extension>error</error_line_files_extension>
+    <line_number_files_destination_directory/>
+    <line_number_files_extension>line</line_number_files_extension>
+    <date_format_lenient>Y</date_format_lenient>
+    <date_format_locale>en_us</date_format_locale>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>154</xloc>
+      <yloc>89</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Select values 1</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>      <field>        <name>movie</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>title_key</name>
+        <rename>line_number</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>years</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>extra</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>title</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>year</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>part</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>type</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>suspended</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>subtitle</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>episode</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>        <select_unspecified>N</select_unspecified>
+    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>451</xloc>
+      <yloc>89</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Text file output</name>
+    <type>TextFileOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <separator>;</separator>
+    <enclosure>&quot;</enclosure>
+    <enclosure_forced>N</enclosure_forced>
+    <header>Y</header>
+    <footer>N</footer>
+    <format>DOS</format>
+    <compression>None</compression>
+    <encoding/>
+    <endedLine/>
+    <file>
+      <name>&#47;home&#47;roland&#47;projects&#47;imdb&#47;tmp&#47;tmp-title</name>
+      <is_command>N</is_command>
+      <extention>txt</extention>
+      <append>N</append>
+      <split>N</split>
+      <haspartno>N</haspartno>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <pad>N</pad>
+      <fast_dump>N</fast_dump>
+      <splitevery>0</splitevery>
+      </file>
+    <fields>
+      <field>
+        <name>movie</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>title_key</name>
+        <type>Integer</type>
+        <format>0</format>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>status</name>
+        <type>Integer</type>
+        <format>0</format>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>have_match</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>years</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>extra</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>title</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>year</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>part</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>type</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>suspended</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>subtitle</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>episode</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>349</xloc>
+      <yloc>152</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>ods_movie</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>imdb</connection>
+    <schema/>
+    <table>ods_movie</table>
+    <commit>10000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>550</xloc>
+      <yloc>93</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step_error_handling>
+      <error>
+        <source_step>ods_movie</source_step>
+        <target_step>Movie  Errors</target_step>
+        <is_enabled>Y</is_enabled>
+        <nr_valuename/>
+        <descriptions_valuename>error_description</descriptions_valuename>
+        <fields_valuename>error_fields</fields_valuename>
+        <codes_valuename>error_codes</codes_valuename>
+        <max_errors>-1</max_errors>
+        <max_pct_errors>-1</max_pct_errors>
+        <min_pct_rows>-1</min_pct_rows>
+      </error>
+  </step_error_handling>
+   <slave-step-copy-partition-distribution>
+</slave-step-copy-partition-distribution>
+   <slave_transformation>N</slave_transformation>
+</transformation>
