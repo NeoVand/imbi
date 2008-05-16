@@ -74,7 +74,7 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Movies.list</from><to>Extract Movies</to><enabled>Y</enabled> </hop>  <hop> <from>Select values 1</from><to>ods_movie</to><enabled>Y</enabled> </hop>  <hop> <from>CREATE ods_movie</from><to>Movies.list</to><enabled>Y</enabled> </hop>  <hop> <from>ods_movie</from><to>Movie  Errors</to><enabled>Y</enabled> </hop>  <hop> <from>Extract Movies</from><to>Select values 1</to><enabled>Y</enabled> </hop>  <hop> <from>Extract Movies</from><to>Text file output</to><enabled>N</enabled> </hop>  </order>
+  <hop> <from>Movies.list</from><to>Extract Movies</to><enabled>Y</enabled> </hop>  <hop> <from>Select values 1</from><to>ods_movie</to><enabled>Y</enabled> </hop>  <hop> <from>CREATE ods_movie</from><to>Movies.list</to><enabled>Y</enabled> </hop>  <hop> <from>ods_movie</from><to>Movie  Errors</to><enabled>Y</enabled> </hop>  <hop> <from>Extract Movies</from><to>Filter matched rows</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>Select values 1</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>Excluded Movies</to><enabled>Y</enabled> </hop>  </order>
   <step>
     <name>CREATE ods_movie</name>
     <type>ExecSQL</type>
@@ -91,14 +91,14 @@
     <sql>drop table if exists ods_movie;
 
 CREATE TABLE ods_movie (
-  movie       varchar(255) NOT NULL,
-  line_number mediumint    NOT NULL, 
-  movie_id    varchar(255) NOT NULL,
-  title       varchar(255) NOT NULL,
-  subtitle    varchar(255) NOT NULL default &apos;&apos;,
-  episode     varchar(50)  NOT NULL default &apos;&apos;,
-  year        char(4)      NOT NULL,
-  part        char(5)      NOT NULL default &apos;&apos;,
+  line_text   varchar(255)       NOT NULL,
+  line_number mediumint unsigned NOT NULL, 
+  movie_id    varchar(255)       NOT NULL,
+  title       varchar(255)       NOT NULL,
+  subtitle    varchar(255)       NOT NULL default &apos;&apos;,
+  episode     varchar(50)        NOT NULL default &apos;&apos;,
+  year        char(4)            NOT NULL,
+  part        char(5)            NOT NULL default &apos;&apos;,
   type        enum(
                 &apos;television movie&apos;
               , &apos;video game&apos;
@@ -113,7 +113,8 @@ CREATE TABLE ods_movie (
                 &apos;yes&apos;
               , &apos;no&apos;
               )            NOT NULL,
-  primary key(title,year,part,subtitle,episode,type)
+  primary key(movie_id),
+  unique(title,year,part,subtitle,episode,type)
 ) 
 ENGINE=MyISAM 
 DEFAULT CHARSET=latin1
@@ -150,7 +151,7 @@ DEFAULT COLLATE=latin1_general_cs
 var status= 0;
 var have_match= &quot;match&quot;;
 
-var movie_string= movie.getString();
+var movie_string= line_text.getString();
 var movie_id= &apos;&apos;;
 var movie_years= &apos;&apos;;
 var extra_info= &apos;&apos;;
@@ -308,8 +309,8 @@ if(
         <precision>-1</precision>
       </field>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>259</xloc>
-      <yloc>90</yloc>
+      <xloc>265</xloc>
+      <yloc>100</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -515,8 +516,8 @@ if(
       </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>663</xloc>
-      <yloc>92</yloc>
+      <xloc>552</xloc>
+      <yloc>214</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -552,7 +553,7 @@ if(
     <include_field/>
     <rownum>Y</rownum>
     <rownumByFile>N</rownumByFile>
-    <rownum_field>title_key</rownum_field>
+    <rownum_field>line_number</rownum_field>
     <format>mixed</format>
     <encoding>ISO-8859-1</encoding>
     <file>
@@ -566,7 +567,7 @@ if(
     </filters>
     <fields>
       <field>
-        <name>movie</name>
+        <name>line_text</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -597,8 +598,8 @@ if(
     <date_format_locale>en_us</date_format_locale>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>154</xloc>
-      <yloc>89</yloc>
+      <xloc>158</xloc>
+      <yloc>98</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -613,12 +614,12 @@ if(
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <fields>      <field>        <name>movie</name>
+    <fields>      <field>        <name>line_text</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
-      </field>      <field>        <name>title_key</name>
-        <rename>line_number</rename>
+      </field>      <field>        <name>line_number</name>
+        <rename/>
         <length>-2</length>
         <precision>-2</precision>
       </field>      <field>        <name>years</name>
@@ -664,14 +665,76 @@ if(
       </field>        <select_unspecified>N</select_unspecified>
     </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>451</xloc>
-      <yloc>89</yloc>
+      <xloc>453</xloc>
+      <yloc>99</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Text file output</name>
+    <name>ods_movie</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>imdb</connection>
+    <schema/>
+    <table>ods_movie</table>
+    <commit>10000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>551</xloc>
+      <yloc>99</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Filter matched rows</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>N</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+<send_true_to>Select values 1</send_true_to>
+<send_false_to>Excluded Movies</send_false_to>
+    <compare>
+<condition>
+ <negated>N</negated>
+ <leftvalue>have_match</leftvalue>
+ <function>=</function>
+ <rightvalue/>
+ <value><name>constant</name><type>String</type><text>match</text><length>-1</length><precision>-1</precision><isnull>N</isnull></value> </condition>
+    </compare>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>363</xloc>
+      <yloc>101</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Excluded Movies</name>
     <type>TextFileOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -690,7 +753,7 @@ if(
     <encoding/>
     <endedLine/>
     <file>
-      <name>&#47;home&#47;roland&#47;projects&#47;imdb&#47;tmp&#47;tmp-title</name>
+      <name>${Internal.Transformation.Filename.Directory}&#47;..&#47;excluded&#47;movies</name>
       <is_command>N</is_command>
       <extention>txt</extention>
       <append>N</append>
@@ -704,7 +767,7 @@ if(
       </file>
     <fields>
       <field>
-        <name>movie</name>
+        <name>line_text</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -715,7 +778,7 @@ if(
         <precision>-1</precision>
         </field>
       <field>
-        <name>title_key</name>
+        <name>line_number</name>
         <type>Integer</type>
         <format>0</format>
         <currency/>
@@ -846,45 +909,22 @@ if(
         <length>-1</length>
         <precision>-1</precision>
         </field>
+      <field>
+        <name>movie_id</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
       </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>349</xloc>
-      <yloc>152</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>ods_movie</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>imdb</connection>
-    <schema/>
-    <table>ods_movie</table>
-    <commit>10000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>550</xloc>
-      <yloc>93</yloc>
+      <xloc>365</xloc>
+      <yloc>209</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
