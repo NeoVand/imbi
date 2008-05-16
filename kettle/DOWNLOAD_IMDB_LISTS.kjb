@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<job>
+  <name>DOWNLOAD_IMDB_LISTS</name>
+    <description/>
+    <extended_description/>
+    <job_version/>
+    <job_status>0</job_status>
+  <directory>&#47;</directory>
+  <created_user>-</created_user>
+  <created_date>2007&#47;12&#47;13 21:59:55.807</created_date>
+  <modified_user>-</modified_user>
+  <modified_date>2007&#47;12&#47;13 21:59:55.807</modified_date>
+    <slaveservers>
+    </slaveservers>
+  <logconnection/>
+  <logtable/>
+   <use_batchid>Y</use_batchid>
+   <pass_batchid>N</pass_batchid>
+   <use_logfield>Y</use_logfield>
+   <shared_objects_file/>
+  <entries>
+    <entry>
+      <name>START</name>
+      <description>Special entries</description>
+      <type>SPECIAL</type>
+      <start>Y</start>
+      <dummy>N</dummy>
+      <repeat>N</repeat>
+      <schedulerType>0</schedulerType>
+      <intervalSeconds>0</intervalSeconds>
+      <intervalMinutes>60</intervalMinutes>
+      <hour>12</hour>
+      <minutes>0</minutes>
+      <weekDay>1</weekDay>
+      <DayOfMonth>1</DayOfMonth>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>29</xloc>
+      <yloc>109</yloc>
+      </entry>
+    <entry>
+      <name>Get a file with FTP 1</name>
+      <description>Get a file with FTP</description>
+      <type>FTP</type>
+      <servername>ftp.fu-berlin.de</servername>
+      <username/>
+      <password>Encrypted </password>
+      <ftpdirectory>&#47;pub&#47;misc&#47;movies&#47;database</ftpdirectory>
+      <targetdirectory>${Internal.Job.Filename.Directory}&#47;..&#47;input</targetdirectory>
+      <wildcard>.*\.list\.gz</wildcard>
+      <binary>Y</binary>
+      <timeout>0</timeout>
+      <remove>N</remove>
+      <only_new>N</only_new>
+      <active>Y</active>
+      <control_encoding>ISO-8859-1</control_encoding>
+      <parallel>N</parallel>
+      <draw>Y</draw>
+      <nr>0</nr>
+      <xloc>148</xloc>
+      <yloc>114</yloc>
+      </entry>
+  </entries>
+  <hops>
+    <hop>
+      <from>START</from>
+      <to>Get a file with FTP 1</to>
+      <from_nr>0</from_nr>
+      <to_nr>0</to_nr>
+      <enabled>Y</enabled>
+      <evaluation>Y</evaluation>
+      <unconditional>Y</unconditional>
+    </hop>
+  </hops>
+  <notepads>
+  </notepads>
+</job>
