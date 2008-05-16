@@ -93,6 +93,7 @@
 CREATE TABLE ods_movie (
   movie       varchar(255) NOT NULL,
   line_number mediumint    NOT NULL, 
+  movie_id    varchar(255) NOT NULL,
   title       varchar(255) NOT NULL,
   subtitle    varchar(255) NOT NULL default &apos;&apos;,
   episode     varchar(50)  NOT NULL default &apos;&apos;,
@@ -150,7 +151,7 @@ var status= 0;
 var have_match= &quot;match&quot;;
 
 var movie_string= movie.getString();
-var movie_string_head= &apos;&apos;;
+var movie_id= &apos;&apos;;
 var movie_years= &apos;&apos;;
 var extra_info= &apos;&apos;;
 
@@ -171,11 +172,11 @@ if(
   )
 ){
   status= 1;
-  movie_string_head= RegExp.$1;
+  movie_id= RegExp.$1;
   movie_years= RegExp.$3;
   extra_info= RegExp.$5;
   if(
-    movie_string_head.match(
+    movie_id.match(
       &#47;^(.+) \(([0-9\?]{4})(\&#47;[IVX]+)?\)( \((TV|VG|V|mini)\))?( \{([^\{\}]+)\})?( \{\{SUSPENDED\}\})?$&#47;
 &#47;&#47;      1      2         \23       \3   4   5           \5 \4 6   7       \7 \6 8
     )
@@ -300,6 +301,11 @@ if(
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
+      </field>      <field>        <name>movie_id</name>
+        <rename>movie_id</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
       </field>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>259</xloc>
@@ -349,19 +355,19 @@ if(
         <decimal/>
         <group/>
         <nullif/>
-        <length>-1</length>
+        <length>255</length>
         <precision>-1</precision>
         </field>
       <field>
         <name>line_number</name>
         <type>Integer</type>
-        <format>0</format>
+        <format/>
         <currency/>
         <decimal/>
         <group/>
         <nullif/>
-        <length>-1</length>
-        <precision>-1</precision>
+        <length>10</length>
+        <precision>0</precision>
         </field>
       <field>
         <name>years</name>
@@ -453,6 +459,17 @@ if(
         </field>
       <field>
         <name>episode</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>movie_id</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -637,6 +654,10 @@ if(
         <length>-2</length>
         <precision>-2</precision>
       </field>      <field>        <name>episode</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>movie_id</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
