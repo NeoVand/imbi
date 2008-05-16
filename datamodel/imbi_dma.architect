@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<architect-project version="1.0" appversion="0.9.10">
+ <project-name>imbi_dma002</project-name>
+ <project-data-sources>
+  <data-source id="DS0">
+   <property key="Logical" value="Not Configured" />
+  </data-source>
+  <data-source id="DS2">
+   <property key="Connection Type" value="MySQL" />
+   <property key="Logical" value="IMBI_DMA" />
+   <property key="JDBC URL" value="jdbc:mysql://:3306/" />
+   <property key="UID" value="" />
+   <property key="PWD" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.database" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.port" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.hostname" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.repos.login" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.repos.password" value="" />
+  </data-source>
+ </project-data-sources>
+ <source-databases>
+  <database id="DB0" populated="false" dbcs-ref="DS2" name="IMBI_DMA" physicalName="IMBI_DMA" />
+ </source-databases>
+ <target-database dbcs-ref="DS0">
+  <table id="TAB1" populated="true" name="F_Release" objectType="TABLE" physicalName="f_release" remarks="" >
+   <folder id="FOL2" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL3" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Kalender_kalender_d_key_seq" name="calendar_d_key" nullable="0" physicalName="calendar_d_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="release date" scale="0" type="4" />
+    <column id="COL4" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Movie_movie_d_key_seq" name="movie_d_key" nullable="0" physicalName="movie_d_key" precision="10" primaryKeySeq="1" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL5" populated="true" autoIncrement="false" autoIncrementSequenceName="Country_country_d_key_seq" name="country_d_key" nullable="0" physicalName="country_d_key" precision="10" primaryKeySeq="2" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL6" populated="true" autoIncrement="false" autoIncrementSequenceName="F_Release_runningTime_seq" name="runningTime" nullable="0" physicalName="runningtime" precision="10" referenceCount="1" remarks="in minutes" scale="0" type="4" />
+    <column id="COL7" populated="true" autoIncrement="false" autoIncrementSequenceName="F_Release_releases_seq" name="releases" nullable="0" physicalName="releases" precision="10" referenceCount="1" remarks="number of releases (usually 1)" scale="0" type="4" />
+   </folder>
+   <folder id="FOL8" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL9" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL10" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX11" populated="true" clustered="false" index-type="CLUSTERED" name="F_Release_pk" physicalName="F_Release_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC12" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL3" name="calendar_d_key" physicalName="kalender_d_key" />
+     <index-column id="IDC13" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL4" name="movie_d_key" physicalName="movie_d_key" />
+     <index-column id="IDC14" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL5" name="country_d_key" physicalName="country_d_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB15" populated="true" name="D_Movie" objectType="TABLE" physicalName="d_movie" remarks="" >
+   <folder id="FOL16" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL17" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Movie_movie_d_key_seq" name="movie_d_key" nullable="0" physicalName="movie_d_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL18" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Movie_movie_key_seq" name="movie_key" nullable="0" physicalName="movie_key" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL19" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Movie_startDate_seq" name="startDate" nullable="0" physicalName="startdate" precision="10" referenceCount="1" remarks="" scale="0" type="91" />
+    <column id="COL20" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Movie_endDate_seq" name="endDate" nullable="0" physicalName="enddate" precision="10" referenceCount="1" remarks="" scale="0" type="91" />
+    <column id="COL21" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Movie_title_seq" name="title" nullable="0" physicalName="title" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL22" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Movie_movie_id_seq" name="movie_id" nullable="0" physicalName="movie_id" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL23" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Movie_rating_seq" name="rating" nullable="0" physicalName="rating" precision="50" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL24" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Movie_ratingReason_seq" name="ratingReason" nullable="0" physicalName="ratingreason" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL25" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Movie_movieTypeName_seq" name="movieTypeName" nullable="0" physicalName="movietypename" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL26" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Movie_rank_seq" name="rank" nullable="0" physicalName="rank" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL27" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Movie_votes_seq" name="votes" nullable="0" physicalName="votes" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL28" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Movie_votesDistribution_seq" name="votesDistribution" nullable="0" physicalName="votesdistribution" precision="10" referenceCount="1" remarks="" scale="0" type="1" />
+    <column id="COL29" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Movie_genre_seq" name="genre" nullable="0" physicalName="genre" precision="100" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL30" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Movie_color_seq" name="color" nullable="0" physicalName="color" precision="100" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL31" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL32" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL33" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX34" populated="true" clustered="false" index-type="CLUSTERED" name="D_Movie_pk" physicalName="D_Movie_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC35" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL17" name="movie_d_key" physicalName="movie_d_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB36" populated="true" name="D_Calendar" objectType="TABLE" physicalName="d_calendar" remarks="" >
+   <folder id="FOL37" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL38" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Calendar_calendar_d_key_seq" name="calendar_d_key" nullable="0" physicalName="calendar_d_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL39" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Calendar_cal_date_seq" name="cal_date" nullable="0" physicalName="cal_date" precision="10" referenceCount="1" remarks="" scale="0" type="91" />
+    <column id="COL40" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Calendar_year_seq" name="year" nullable="0" physicalName="year" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL41" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Calendar_month_seq" name="month" nullable="0" physicalName="month" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL42" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Calendar_day_seq" name="day" nullable="0" physicalName="day" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL43" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Calendar_display_seq" name="display" nullable="0" physicalName="display" precision="50" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL44" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL45" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL46" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX47" populated="true" clustered="false" index-type="CLUSTERED" name="D_Calendar_pk" physicalName="D_Kalender_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC48" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL38" name="calendar_d_key" physicalName="kalender_d_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB49" populated="true" name="D_Country" objectType="TABLE" physicalName="d_country" remarks="" >
+   <folder id="FOL50" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL51" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Country_country_d_key_seq" name="country_d_key" nullable="0" physicalName="country_d_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL52" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Country_country_seq" name="country" nullable="0" physicalName="country" precision="100" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL53" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL54" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL55" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX56" populated="true" clustered="false" index-type="CLUSTERED" name="D_Country_pk" physicalName="Country_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC57" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL51" name="country_d_key" physicalName="country_d_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB58" populated="true" name="D_MovieStar" objectType="TABLE" physicalName="d_moviestar" remarks="" >
+   <folder id="FOL59" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL60" populated="true" autoIncrement="false" autoIncrementSequenceName="D_MovieStar_movieStar_d_key_seq" name="movieStar_d_key" nullable="0" physicalName="moviestar_d_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL61" populated="true" autoIncrement="false" autoIncrementSequenceName="D_MovieStar_name_seq" name="name" nullable="0" physicalName="name" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL62" populated="true" autoIncrement="false" autoIncrementSequenceName="D_MovieStar_gender_seq" name="gender" nullable="0" physicalName="gender" precision="1" referenceCount="1" remarks="" scale="0" type="1" />
+   </folder>
+   <folder id="FOL63" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL64" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL65" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX66" populated="true" clustered="false" name="D_MovieStar_pk" physicalName="D_MovieStar_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC67" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL60" name="movieStar_d_key" physicalName="movieStar_d_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB68" populated="true" name="F_Cast" objectType="TABLE" physicalName="f_cast" remarks="" >
+   <folder id="FOL69" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL70" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Calender_calender_d_key_seq" name="calendar_d_key" nullable="0" physicalName="calendar_d_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL71" populated="true" autoIncrement="false" autoIncrementSequenceName="D_MovieStar_movieStar_d_key_seq" name="movieStar_d_key" nullable="0" physicalName="moviestar_d_key" precision="10" primaryKeySeq="1" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL72" populated="true" autoIncrement="false" autoIncrementSequenceName="D_Movie_movie_d_key_seq" name="movie_d_key" nullable="0" physicalName="movie_d_key" precision="10" primaryKeySeq="2" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL73" populated="true" autoIncrement="false" autoIncrementSequenceName="F_Cast_characterName_seq" name="characterName" nullable="0" physicalName="charactername" precision="250" primaryKeySeq="3" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL74" populated="true" autoIncrement="false" autoIncrementSequenceName="F_Cast_credited_seq" name="credited" nullable="0" physicalName="credited" precision="1" referenceCount="1" remarks="" scale="0" type="1" />
+    <column id="COL75" populated="true" autoIncrement="false" autoIncrementSequenceName="F_Cast_billingposition_seq" name="billingposition" nullable="0" physicalName="billingposition" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+   </folder>
+   <folder id="FOL76" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL77" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL78" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX79" populated="true" clustered="false" name="F_Cast_pk" physicalName="F_Cast_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC80" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL70" name="calendar_d_key" physicalName="calender_d_key" />
+     <index-column id="IDC81" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL71" name="movieStar_d_key" physicalName="movieStar_d_key" />
+     <index-column id="IDC82" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL72" name="movie_d_key" physicalName="movie_d_key" />
+     <index-column id="IDC83" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL73" name="characterName" physicalName="characterName" />
+    </index>
+   </folder>
+  </table>
+  <relationships>
+   <relationship id="REL84" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB1" fkCardinality="6" identifying="true" name="D_Calender_F_Release_fk" physicalName="d_calender_f_release_fk" pk-table-ref="TAB36" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP85" populated="true" fk-column-ref="COL3" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL38" />
+   </relationship>
+   <relationship id="REL86" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB1" fkCardinality="6" identifying="true" name="D_Movie_F_Release_fk" physicalName="d_movie_f_release_fk" pk-table-ref="TAB15" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP87" populated="true" fk-column-ref="COL4" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL17" />
+   </relationship>
+   <relationship id="REL88" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB1" fkCardinality="6" identifying="true" name="Country_F_Release_fk" physicalName="country_f_release_fk" pk-table-ref="TAB49" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP89" populated="true" fk-column-ref="COL5" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL51" />
+   </relationship>
+   <reference ref-id="REL86" />
+   <relationship id="REL90" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB68" fkCardinality="6" identifying="true" name="D_Movie_F_Cast_fk" physicalName="d_movie_f_cast_fk" pk-table-ref="TAB15" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP91" populated="true" fk-column-ref="COL72" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL17" />
+   </relationship>
+   <reference ref-id="REL84" />
+   <relationship id="REL92" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB68" fkCardinality="6" identifying="true" name="D_Calender_F_Cast_fk" physicalName="d_calender_f_cast_fk" pk-table-ref="TAB36" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP93" populated="true" fk-column-ref="COL70" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL38" />
+   </relationship>
+   <reference ref-id="REL88" />
+   <relationship id="REL94" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB68" fkCardinality="6" identifying="true" name="D_MovieStar_F_Cast_fk" physicalName="d_moviestar_f_cast_fk" pk-table-ref="TAB58" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP95" populated="true" fk-column-ref="COL71" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL60" />
+   </relationship>
+   <reference ref-id="REL90" />
+   <reference ref-id="REL92" />
+   <reference ref-id="REL94" />
+  </relationships>
+ </target-database>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="false" target-catalog="dma002" target-schema=""> </ddl-generator>
+ <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
+ <play-pen zoom="0.8113716295427901" viewportX="0" viewportY="0" relationship-style="rectilinear">
+  <table-pane table-ref="TAB1" x="112" y="44" />
+  <table-pane table-ref="TAB15" x="676" y="85" />
+  <table-pane table-ref="TAB36" x="253" y="309" />
+  <table-pane table-ref="TAB49" x="28" y="534" />
+  <table-pane table-ref="TAB58" x="702" y="537" />
+  <table-pane table-ref="TAB68" x="410" y="525" />
+  <table-link relationship-ref="REL84" pk-x="49" pk-y="0" fk-x="117" fk-y="111" orientation="72" />
+  <table-link relationship-ref="REL86" pk-x="0" pk-y="164" fk-x="182" fk-y="10" orientation="18" />
+  <table-link relationship-ref="REL88" pk-x="123" pk-y="0" fk-x="12" fk-y="111" orientation="72" />
+  <table-link relationship-ref="REL92" pk-x="141" pk-y="127" fk-x="65" fk-y="0" orientation="132" />
+  <table-link relationship-ref="REL94" pk-x="0" pk-y="55" fk-x="191" fk-y="15" orientation="18" />
+  <table-link relationship-ref="REL90" pk-x="15" pk-y="255" fk-x="115" fk-y="0" orientation="132" />
+ </play-pen>
+ <profiles topNCount="10">
+  </profiles>
+</architect-project>
