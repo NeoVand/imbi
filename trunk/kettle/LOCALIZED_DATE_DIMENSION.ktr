@@ -1,0 +1,713 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<transformation>
+  <info>
+    <name>LOCALIZED_DATE_DIMENSION</name>
+    <description/>
+    <extended_description/>
+    <trans_version/>
+    <trans_status>0</trans_status>
+    <directory>&#47;</directory>
+    <log>
+      <read/>
+      <write/>
+      <input/>
+      <output/>
+      <update/>
+      <rejected/>
+      <connection/>
+      <table/>
+      <use_batchid>Y</use_batchid>
+      <use_logfield>N</use_logfield>
+    </log>
+    <maxdate>
+      <connection/>
+      <table/>
+      <field/>
+      <offset>0.0</offset>
+      <maxdiff>0.0</maxdiff>
+    </maxdate>
+    <size_rowset>1000</size_rowset>
+    <sleep_time_empty>1</sleep_time_empty>
+    <sleep_time_full>1</sleep_time_full>
+    <unique_connections>N</unique_connections>
+    <feedback_shown>Y</feedback_shown>
+    <feedback_size>5000</feedback_size>
+    <using_thread_priorities>N</using_thread_priorities>
+    <shared_objects_file/>
+    <dependencies>
+    </dependencies>
+    <partitionschemas>
+    </partitionschemas>
+    <slaveservers>
+    </slaveservers>
+    <clusterschemas>
+    </clusterschemas>
+  <modified_user>-</modified_user>
+  <modified_date>2007&#47;06&#47;07 12:04:59.781</modified_date>
+  </info>
+  <notepads>
+    <notepad>
+      <note>Prepare</note>
+      <xloc>24</xloc>
+      <yloc>28</yloc>
+      <width>60</width>
+      <heigth>25</heigth>
+    </notepad>
+    <notepad>
+      <note>Input</note>
+      <xloc>26</xloc>
+      <yloc>122</yloc>
+      <width>44</width>
+      <heigth>25</heigth>
+    </notepad>
+    <notepad>
+      <note>Transformation</note>
+      <xloc>25</xloc>
+      <yloc>212</yloc>
+      <width>104</width>
+      <heigth>25</heigth>
+    </notepad>
+    <notepad>
+      <note>Output</note>
+      <xloc>27</xloc>
+      <yloc>302</yloc>
+      <width>54</width>
+      <heigth>25</heigth>
+    </notepad>
+  </notepads>
+  <connection>
+    <name>IMDB</name>
+    <server>localhost</server>
+    <type>MYSQL</type>
+    <access>Native</access>
+    <database>imdb</database>
+    <port>3351</port>
+    <username>root</username>
+    <password>Encrypted </password>
+    <servername/>
+    <data_tablespace/>
+    <index_tablespace/>
+    <attributes>
+      <attribute><code>EXTRA_OPTION_MYSQL.characterEncoding</code><attribute>UTF8</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.defaultFetchSize</code><attribute>500</attribute></attribute>
+      <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
+      <attribute><code>INITIAL_POOL_SIZE</code><attribute>5</attribute></attribute>
+      <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
+      <attribute><code>MAXIMUM_POOL_SIZE</code><attribute>10</attribute></attribute>
+      <attribute><code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>3351</attribute></attribute>
+      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>SQL_CONNECT</code><attribute>set sql_mode := &apos;&apos;</attribute></attribute>
+      <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
+      <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
+    </attributes>
+  </connection>
+  <order>
+  <hop> <from>Day Sequence</from><to>Calculate Dimension Attributes</to><enabled>Y</enabled> </hop>  <hop> <from>Create DIM_DATE</from><to>150 years of Cinema History</to><enabled>Y</enabled> </hop>  <hop> <from>150 years of Cinema History</from><to>Day Sequence</to><enabled>Y</enabled> </hop>  <hop> <from>Calculate Dimension Attributes</from><to>Select values</to><enabled>Y</enabled> </hop>  <hop> <from>Select values</from><to>Load DIM_DATE</to><enabled>Y</enabled> </hop>  </order>
+  <step>
+    <name>Calculate Dimension Attributes</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>Y</compatible>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>&#47;&#47;Create a Locale according to the specified language code
+var locale = new java.util.Locale(
+    language_code.getString()
+,   country_code.getString()
+);
+
+&#47;&#47;Create a calendar, use the specified initial date
+var calendar = new java.util.GregorianCalendar(locale);
+calendar.setTime(initial_date.getDate());
+
+&#47;&#47;set the calendar to the current date by adding DaySequence days
+calendar.add(calendar.DAY_OF_MONTH,DaySequence.getInteger() - 1);
+
+&#47;&#47;get the calendar date
+var date = new java.util.Date(calendar.getTimeInMillis());
+&#47;&#47;en-us example: 9&#47;3&#47;07
+var date_short  = java.text.DateFormat.getDateInstance(
+                      java.text.DateFormat.SHORT
+                  ,   locale
+                  ).format(date);
+&#47;&#47;en-us example: Sep 3, 2007 
+var date_medium = java.text.DateFormat.getDateInstance(
+                      java.text.DateFormat.MEDIUM
+                  ,   locale
+                  ).format(date);
+&#47;&#47;en-us example: September 3, 2007
+var date_long   = java.text.DateFormat.getDateInstance(
+                      java.text.DateFormat.LONG
+                  ,   locale
+                  ).format(date);
+&#47;&#47;en-us example: Monday, September 3, 2007
+var date_full   = java.text.DateFormat.getDateInstance(
+                      java.text.DateFormat.FULL
+                  ,   locale
+                  ).format(date);
+
+&#47;&#47;day in year: 1..366
+var simpleDateFormat   = java.text.SimpleDateFormat(&quot;D&quot;,locale);
+var day_in_year        = simpleDateFormat.format(date);
+&#47;&#47;day in month: 1..31
+simpleDateFormat.applyPattern(&quot;d&quot;);
+var day_in_month       = simpleDateFormat.format(date);
+&#47;&#47;en-us example: &quot;Monday&quot;
+simpleDateFormat.applyPattern(&quot;EEEE&quot;);
+var day_name           = simpleDateFormat.format(date);
+&#47;&#47;en-us example: &quot;Mon&quot;
+simpleDateFormat.applyPattern(&quot;E&quot;);
+var day_abbreviation   = simpleDateFormat.format(date);
+&#47;&#47;week in year, 1..53
+simpleDateFormat.applyPattern(&quot;ww&quot;);
+var week_in_year       = simpleDateFormat.format(date);
+&#47;&#47;week in month, 1..5
+simpleDateFormat.applyPattern(&quot;W&quot;);
+var week_in_month      = simpleDateFormat.format(date);
+&#47;&#47;month number in year, 1..12
+simpleDateFormat.applyPattern(&quot;MM&quot;);
+var month_number       = simpleDateFormat.format(date);
+&#47;&#47;en-us example: &quot;September&quot;
+simpleDateFormat.applyPattern(&quot;MMMM&quot;);
+var month_name         = simpleDateFormat.format(date);
+&#47;&#47;en-us example: &quot;Sep&quot;
+simpleDateFormat.applyPattern(&quot;MMM&quot;);
+var month_abbreviation = simpleDateFormat.format(date);
+&#47;&#47;2 digit representation of the year, example: &quot;07&quot; for 2007
+simpleDateFormat.applyPattern(&quot;y&quot;);
+var year2              = simpleDateFormat.format(date);
+&#47;&#47;4 digit representation of the year, example:  2007
+simpleDateFormat.applyPattern(&quot;yyyy&quot;);
+var year4              = simpleDateFormat.format(date);
+&#47;&#47;handling Quarters is a DIY
+var quarter_name = &quot;Q&quot;;
+var quarter_number;
+switch(parseInt(month_number)){
+    case 1: case 2: case 3: quarter_number = &quot;1&quot;; break;
+    case 4: case 5: case 6: quarter_number = &quot;2&quot;; break;
+    case 7: case 8: case 9: quarter_number = &quot;3&quot;; break;
+    case 10: case 11: case 12: quarter_number = &quot;4&quot;; break;
+}
+quarter_name += quarter_number;
+
+&#47;&#47;get the local yes&#47;no values
+var yes = local_yes.getString();
+var no = local_no.getString();
+
+&#47;&#47;initialize for week calculations
+var first_day_of_week = calendar.getFirstDayOfWeek();
+var day_of_week = java.util.Calendar.DAY_OF_WEEK;
+
+&#47;&#47;find out if this is the first day of the week
+var is_first_day_in_week;
+if(first_day_of_week==calendar.get(day_of_week)){
+    is_first_day_in_week = yes;
+} else {
+    is_first_day_in_week = no;
+}
+
+&#47;&#47;calculate the next day
+calendar.add(calendar.DAY_OF_MONTH,1);
+&#47;&#47;get the next calendar date
+var next_day = new java.util.Date(calendar.getTimeInMillis());
+
+&#47;&#47;find out if this is the first day of the week
+var is_last_day_in_week;
+if(first_day_of_week==calendar.get(day_of_week)){
+    is_last_day_in_week = yes;
+} else {
+    is_last_day_in_week = no;
+}
+
+&#47;&#47;find out if this is the first day of the month
+var is_first_day_of_month;
+if(day_in_month == 1){
+    is_first_day_in_month = yes;
+} else {
+    is_first_day_in_month = no;
+}
+
+&#47;&#47;find out if this is the last day in the month
+var is_last_day_of_month;
+if(java.text.SimpleDateFormat(&quot;d&quot;,locale).format(next_day)==1){
+    is_last_day_in_month = yes;
+} else {
+    is_last_day_in_month = no;
+}
+
+&#47;&#47;date = year4 + &quot;-&quot; + month_number + &quot;-&quot; + day_in_month
+var year_quarter            = year4 + &quot;-&quot; + quarter_name;
+var year_month_number       = year4 + &quot;-&quot; + month_number;
+var year_month_abbreviation = year4 + &quot;-&quot; + month_abbreviation;
+</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>date</name>
+        <rename>date</rename>
+        <type>Date</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>date_short</name>
+        <rename>date_short</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>date_medium</name>
+        <rename>date_medium</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>date_long</name>
+        <rename>date_long</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>date_full</name>
+        <rename>date_full</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>day_in_year</name>
+        <rename>day_in_year</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>day_name</name>
+        <rename>day_name</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>day_abbreviation</name>
+        <rename>day_abbreviation</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>month_abbreviation</name>
+        <rename>month_abbreviation</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>month_name</name>
+        <rename>month_name</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>quarter_name</name>
+        <rename>quarter_name</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>year_quarter</name>
+        <rename>year_quarter</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>year_month_abbreviation</name>
+        <rename>year_month_abbreviation</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>is_last_day_in_month</name>
+        <rename>is_last_day_in_month</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>is_first_day_in_month</name>
+        <rename>is_first_day_in_month</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>year2</name>
+        <rename>year2</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>year4</name>
+        <rename>year4</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>day_in_month</name>
+        <rename>day_in_month</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>week_in_year</name>
+        <rename>week_in_year</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>week_in_month</name>
+        <rename>week_in_month</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>month_number</name>
+        <rename>month_number</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>quarter_number</name>
+        <rename>quarter_number</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>year_month_number</name>
+        <rename>year_month_number</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>is_last_day_in_week</name>
+        <rename>is_last_day_in_week</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>is_first_day_in_week</name>
+        <rename>is_first_day_in_week</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>336</xloc>
+      <yloc>216</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Create DIM_DATE</name>
+    <type>ExecSQL</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>IMDB</connection>
+    <execute_each_row>N</execute_each_row>
+    <replace_variables>N</replace_variables>
+    <sql>DROP TABLE IF EXISTS dim_date
+;
+CREATE TABLE IF NOT EXISTS dim_date (
+  date_key                smallint unsigned NOT NULL,
+  date                    date              NOT NULL,
+  date_short              char(12)          NOT NULL,
+  date_medium             char(16)          NOT NULL,
+  date_long               char(24)          NOT NULL,
+  date_full               char(32)          NOT NULL,
+  day_in_year             smallint unsigned NOT NULL,
+  day_in_month            tinyint  unsigned NOT NULL,
+  is_first_day_in_month   char(10)          NOT NULL,
+  is_last_day_in_month    char(10)          NOT NULL,
+  day_abbreviation        char(3)           NOT NULL,
+  day_name                char(12)          NOT NULL,
+  week_in_year            tinyint  unsigned NOT NULL,
+  week_in_month           tinyint  unsigned NOT NULL,
+  is_first_day_in_week    char(10)          NOT NULL,
+  is_last_day_in_week     char(10)          NOT NULL,
+  month_number            tinyint  unsigned NOT NULL,
+  month_abbreviation      char(3)           NOT NULL,
+  month_name              char(12)          NOT NULL,
+  year2                   char(2)           NOT NULL,
+  year4                   year              NOT NULL,
+  quarter_name            char(2)           NOT NULL,
+  quarter_number          tinyint           NOT NULL,
+  year_quarter            char(7)           NOT NULL,
+  year_month_number       char(7)           NOT NULL,
+  year_month_abbreviation char(8)           NOT NULL,
+  PRIMARY KEY(date_key),
+  UNIQUE(date)
+) 
+ENGINE=MyISAM 
+DEFAULT CHARACTER SET utf8
+DEFAULT COLLATE utf8_unicode_ci</sql>
+    <insert_field/>
+    <update_field/>
+    <delete_field/>
+    <read_field/>
+    <arguments>
+    </arguments>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>181</xloc>
+      <yloc>32</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Day Sequence</name>
+    <type>Sequence</type>
+    <description/>
+    <distribute>N</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <valuename>DaySequence</valuename>
+      <use_database>N</use_database>
+      <connection>IMDB</connection>
+      <schema/>
+      <seqname>SEQ_</seqname>
+      <use_counter>Y</use_counter>
+      <counter_name/>
+      <start_at>1</start_at>
+      <increment_by>1</increment_by>
+      <max_value>9999999</max_value>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>181</xloc>
+      <yloc>216</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>150 years of Cinema History</name>
+    <type>RowGenerator</type>
+    <description/>
+    <distribute>N</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>language_code</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>en</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>country_code</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>uk</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>initial_date</name>
+        <type>Date</type>
+        <format>yyyy-MM-dd</format>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>1900-01-01</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>local_yes</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>yes</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>local_no</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif>no</nullif>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+    </fields>
+    <limit>54900</limit>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>180</xloc>
+      <yloc>123</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Load DIM_DATE</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>IMDB</connection>
+    <schema/>
+    <table>dim_date</table>
+    <commit>100</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>183</xloc>
+      <yloc>301</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Select values</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>      <field>        <name>DaySequence</name>
+        <rename>date_key</rename>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>date</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>date_short</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>date_medium</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>date_long</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>date_full</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>day_in_year</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>day_name</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>day_abbreviation</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>month_abbreviation</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>month_name</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>quarter_name</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>year_quarter</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>year_month_abbreviation</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>is_last_day_in_month</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>is_first_day_in_month</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>year2</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>year4</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>day_in_month</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>week_in_year</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>week_in_month</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>month_number</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>quarter_number</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>year_month_number</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>is_last_day_in_week</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>is_first_day_in_week</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>        <select_unspecified>N</select_unspecified>
+    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>499</xloc>
+      <yloc>216</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step_error_handling>
+  </step_error_handling>
+   <slave-step-copy-partition-distribution>
+</slave-step-copy-partition-distribution>
+   <slave_transformation>N</slave_transformation>
+</transformation>
