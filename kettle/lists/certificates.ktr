@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>release-dates</name>
+    <name>certificates</name>
     <description/>
     <extended_description/>
     <trans_version/>
+    <trans_status>0</trans_status>
     <directory>&#47;</directory>
     <log>
       <read/>
@@ -31,7 +32,7 @@
     <unique_connections>N</unique_connections>
     <feedback_shown>Y</feedback_shown>
     <feedback_size>50000</feedback_size>
-    <using_thread_priorities>N</using_thread_priorities>
+    <using_thread_priorities>Y</using_thread_priorities>
     <shared_objects_file/>
     <dependencies>
     </dependencies>
@@ -42,14 +43,14 @@
     <clusterschemas>
     </clusterschemas>
   <modified_user>-</modified_user>
-  <modified_date>2007&#47;12&#47;19 00:13:11.131</modified_date>
+  <modified_date>2008&#47;05&#47;17 17:57:45.529</modified_date>
   </info>
   <notepads>
     <notepad>
-      <note>The release dates list records the release dates of movies on a country by country basis.</note>
-      <xloc>52</xloc>
-      <yloc>20</yloc>
-      <width>437</width>
+      <note>The certificates list contains the certificates &#47; ratings classifications (MPAA, BBFC etc.)</note>
+      <xloc>59</xloc>
+      <yloc>27</yloc>
+      <width>422</width>
       <heigth>23</heigth>
     </notepad>
   </notepads>
@@ -81,7 +82,7 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>CREATE TABLE</from><to>input-list</to><enabled>Y</enabled> </hop>  <hop> <from>input-list</from><to>transform</to><enabled>Y</enabled> </hop>  <hop> <from>table-output</from><to>rejected</to><enabled>Y</enabled> </hop>  <hop> <from>Select values</from><to>table-output</to><enabled>Y</enabled> </hop>  <hop> <from>transform</from><to>Filter matched rows</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>Select values</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>excluded</to><enabled>Y</enabled> </hop>  </order>
+  <hop> <from>CREATE TABLE</from><to>input-list</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>Select values</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>excluded</to><enabled>Y</enabled> </hop>  <hop> <from>Select values</from><to>table-output</to><enabled>Y</enabled> </hop>  <hop> <from>input-list</from><to>transform</to><enabled>Y</enabled> </hop>  <hop> <from>transform</from><to>Filter matched rows</to><enabled>Y</enabled> </hop>  <hop> <from>table-output</from><to>rejected</to><enabled>Y</enabled> </hop>  </order>
   <step>
     <name>CREATE TABLE</name>
     <type>ExecSQL</type>
@@ -103,11 +104,9 @@ CREATE TABLE &quot;${Internal.Transformation.Name}&quot; (
   line_number  int unsigned      NOT NULL DEFAULT 0,
   movie_id     varchar(255)      NOT NULL DEFAULT 0,
   country_name varchar(64)       NOT NULL DEFAULT &apos;&apos;,
-  day_number   tinyint unsigned  NOT NULL DEFAULT 0,
-  month_number tinyint unsigned  NOT NULL DEFAULT 0,
-  year         smallint unsigned NOT NULL DEFAULT 0,
-  region_name  varchar(128)      NOT NULL DEFAULT &apos;&apos;,
-  primary key(movie_id,country_name,region_name,year,month_number,day_number)
+  rating       varchar(32)       NOT NULL DEFAULT &apos;&apos;,
+  extra        varchar(128)       NOT NULL DEFAULT &apos;&apos;,
+  primary key(movie_id, country_name, extra, rating)
 )
 ENGINE=MyISAM 
 DEFAULT CHARSET=latin1
@@ -121,8 +120,8 @@ DEFAULT COLLATE=latin1_general_cs
     </arguments>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>52</xloc>
-      <yloc>79</yloc>
+      <xloc>63</xloc>
+      <yloc>82</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -149,8 +148,8 @@ DEFAULT COLLATE=latin1_general_cs
     </compare>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>394</xloc>
-      <yloc>81</yloc>
+      <xloc>405</xloc>
+      <yloc>84</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -181,27 +180,19 @@ DEFAULT COLLATE=latin1_general_cs
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
-      </field>      <field>        <name>day_number</name>
+      </field>      <field>        <name>rating</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
-      </field>      <field>        <name>month_number</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>year</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>region_name</name>
+      </field>      <field>        <name>extra</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
       </field>        <select_unspecified>N</select_unspecified>
     </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>494</xloc>
-      <yloc>81</yloc>
+      <xloc>505</xloc>
+      <yloc>84</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -264,7 +255,7 @@ DEFAULT COLLATE=latin1_general_cs
       <field>
         <name>status</name>
         <type>Integer</type>
-        <format>0</format>
+        <format>0.#####</format>
         <currency/>
         <decimal/>
         <group/>
@@ -305,11 +296,33 @@ DEFAULT COLLATE=latin1_general_cs
         <length>-1</length>
         <precision>-1</precision>
         </field>
+      <field>
+        <name>rating</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>extra</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
       </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>394</xloc>
-      <yloc>173</yloc>
+      <xloc>405</xloc>
+      <yloc>176</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -332,9 +345,9 @@ DEFAULT COLLATE=latin1_general_cs
     <enclosure_breaks>N</enclosure_breaks>
     <escapechar/>
     <header>Y</header>
-    <nr_headerlines>254</nr_headerlines>
+    <nr_headerlines>357</nr_headerlines>
     <footer>Y</footer>
-    <nr_footerlines>2</nr_footerlines>
+    <nr_footerlines>1</nr_footerlines>
     <line_wrapped>N</line_wrapped>
     <nr_wraps>1</nr_wraps>
     <layout_paged>N</layout_paged>
@@ -390,8 +403,8 @@ DEFAULT COLLATE=latin1_general_cs
     <date_format_locale>en_us</date_format_locale>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>165</xloc>
-      <yloc>81</yloc>
+      <xloc>176</xloc>
+      <yloc>84</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -437,19 +450,19 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
-        <length>255</length>
+        <length>-1</length>
         <precision>-1</precision>
         </field>
       <field>
         <name>line_number</name>
         <type>Integer</type>
-        <format/>
+        <format>0</format>
         <currency/>
         <decimal/>
         <group/>
         <nullif/>
-        <length>10</length>
-        <precision>0</precision>
+        <length>-1</length>
+        <precision>-1</precision>
         </field>
       <field>
         <name>movie_id</name>
@@ -474,7 +487,7 @@ DEFAULT COLLATE=latin1_general_cs
         <precision>-1</precision>
         </field>
       <field>
-        <name>day_number</name>
+        <name>rating</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -485,7 +498,7 @@ DEFAULT COLLATE=latin1_general_cs
         <precision>-1</precision>
         </field>
       <field>
-        <name>month_number</name>
+        <name>extra</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -496,29 +509,7 @@ DEFAULT COLLATE=latin1_general_cs
         <precision>-1</precision>
         </field>
       <field>
-        <name>year</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <length>-1</length>
-        <precision>-1</precision>
-        </field>
-      <field>
-        <name>region_name</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <length>-1</length>
-        <precision>-1</precision>
-        </field>
-      <field>
-        <name>error_description</name>
+        <name>error_descriptions</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -540,7 +531,7 @@ DEFAULT COLLATE=latin1_general_cs
         <precision>-1</precision>
         </field>
       <field>
-        <name>error_code</name>
+        <name>error_codes</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -553,8 +544,8 @@ DEFAULT COLLATE=latin1_general_cs
       </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>601</xloc>
-      <yloc>175</yloc>
+      <xloc>609</xloc>
+      <yloc>176</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -587,8 +578,8 @@ DEFAULT COLLATE=latin1_general_cs
     <return_field/>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>597</xloc>
-      <yloc>80</yloc>
+      <xloc>610</xloc>
+      <yloc>81</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -613,68 +604,21 @@ var line_text_string= line_text.getString(); &#47;&#47;this is the line of text 
 
 &#47;&#47;put the specific script below:
 var movie_id = &apos;&apos;;
-var country_name = &apos;&apos;; 
-var day_number = &apos;&apos;;
-var month_number = &apos;&apos;;
-var year = &apos;&apos;;
-var region_name = &apos;&apos;;
+var country_name = &apos;&apos;;
+var rating = &apos;&apos;;
+var extra = &apos;&apos;;
 
 if(
   line_text_string.match(
-    &#47;^([^\t]+)\t+(.+):((([0-9]{1,2}) +)?([A-Za-z]+),? *)?([0-9]{4})(\t+\((.+)\))?$&#47;i
-&#47;&#47;   1          2    345               6                7         8     9
+    &#47;^([^\t]+)\t+([^:]+):([^\t]+)(\t+(.+))?$&#47;i
+&#47;&#47;    1          2       3       4   5
   )
 ){
   status= 1;
-  movie_id = RegExp.$1; &#47;&#47;movie_id
+  movie_id = RegExp.$1;     &#47;&#47;movie_id
   country_name = RegExp.$2; &#47;&#47;country_name
-  day_number = (RegExp.$5==&apos;&apos;?0:RegExp.$5);
-
-  switch(RegExp.$6){    
-    case &apos;&apos;:
-      month_number= 0;
-      break;
-    case &apos;January&apos;:
-      month_number= 1;
-      break;
-    case &apos;February&apos;:
-      month_number= 2;
-      break;
-    case &apos;March&apos;:
-      month_number= 3;
-      break;
-    case &apos;April&apos;:
-      month_number= 4;
-      break;
-    case &apos;May&apos;:
-      month_number= 5;
-      break;
-    case &apos;June&apos;:
-      month_number= 6;
-      break;
-    case &apos;July&apos;:
-      month_number= 7;
-      break;
-    case &apos;August&apos;:
-      month_number= 8;
-      break;
-    case &apos;September&apos;:
-      month_number= 9;
-      break;
-    case &apos;October&apos;:
-      month_number= 10;
-      break;
-    case &apos;November&apos;:
-      month_number= 11;
-      break;
-    case &apos;December&apos;:
-      month_number= 12;
-      break;
-    default:
-      month_number= RegExp.$6;
-  }
-  year = RegExp.$7; &#47;&#47;year
-  region_name = RegExp.$9; &#47;&#47;region_name
+  rating = RegExp.$3;       &#47;&#47;rating
+  extra = RegExp.$5;        &#47;&#47;extra1
 } else {
   &#47;&#47;TODO:discard this row
   have_match= &apos;no match&apos;;
@@ -700,30 +644,20 @@ if(
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
-      </field>      <field>        <name>day_number</name>
-        <rename>day_number</rename>
+      </field>      <field>        <name>rating</name>
+        <rename>rating</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
-      </field>      <field>        <name>month_number</name>
-        <rename>month_number</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>year</name>
-        <rename>year</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>region_name</name>
-        <rename>region_name</rename>
+      </field>      <field>        <name>extra</name>
+        <rename>extra</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
       </field>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>278</xloc>
-      <yloc>81</yloc>
+      <xloc>289</xloc>
+      <yloc>84</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -734,9 +668,9 @@ if(
         <target_step>rejected</target_step>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
-        <descriptions_valuename>error_description</descriptions_valuename>
+        <descriptions_valuename>error_descriptions</descriptions_valuename>
         <fields_valuename>error_fields</fields_valuename>
-        <codes_valuename>error_code</codes_valuename>
+        <codes_valuename>error_codes</codes_valuename>
         <max_errors>-1</max_errors>
         <max_pct_errors>-1</max_pct_errors>
         <min_pct_rows>-1</min_pct_rows>
