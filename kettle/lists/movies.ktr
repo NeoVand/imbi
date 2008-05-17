@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>LOAD_MOVIES_LIST</name>
+    <name>movies</name>
     <description/>
     <extended_description/>
     <trans_version/>
+    <trans_status>0</trans_status>
     <directory>&#47;</directory>
     <log>
       <read/>
@@ -47,11 +48,11 @@
   <notepads>
   </notepads>
   <connection>
-    <name>imdb</name>
+    <name>imbi_lists</name>
     <server>127.0.0.1</server>
     <type>MYSQL</type>
     <access>Native</access>
-    <database>imdb</database>
+    <database>imbi_lists</database>
     <port>3351</port>
     <username>root</username>
     <password>Encrypted </password>
@@ -74,9 +75,9 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>Movies.list</from><to>Extract Movies</to><enabled>Y</enabled> </hop>  <hop> <from>Select values 1</from><to>ods_movie</to><enabled>Y</enabled> </hop>  <hop> <from>CREATE ods_movie</from><to>Movies.list</to><enabled>Y</enabled> </hop>  <hop> <from>ods_movie</from><to>Movie  Errors</to><enabled>Y</enabled> </hop>  <hop> <from>Extract Movies</from><to>Filter matched rows</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>Select values 1</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>Excluded Movies</to><enabled>Y</enabled> </hop>  </order>
+  <hop> <from>input-list</from><to>transform</to><enabled>Y</enabled> </hop>  <hop> <from>Select values</from><to>output-table</to><enabled>Y</enabled> </hop>  <hop> <from>CREATE TABLE</from><to>input-list</to><enabled>Y</enabled> </hop>  <hop> <from>output-table</from><to>rejected</to><enabled>Y</enabled> </hop>  <hop> <from>transform</from><to>Filter matched rows</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>Select values</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>excluded</to><enabled>Y</enabled> </hop>  </order>
   <step>
-    <name>CREATE ods_movie</name>
+    <name>CREATE TABLE</name>
     <type>ExecSQL</type>
     <description/>
     <distribute>Y</distribute>
@@ -85,12 +86,13 @@
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <connection>imdb</connection>
+    <connection>imbi_lists</connection>
     <execute_each_row>N</execute_each_row>
-    <replace_variables>N</replace_variables>
-    <sql>drop table if exists ods_movie;
+    <replace_variables>Y</replace_variables>
+    <sql>DROP TABLE IF EXISTS &quot;${Internal.Transformation.Name}&quot;
+;
 
-CREATE TABLE ods_movie (
+CREATE TABLE &quot;${Internal.Transformation.Name}&quot; (
   line_text   varchar(255)       NOT NULL,
   line_number mediumint unsigned NOT NULL, 
   movie_id    varchar(255)       NOT NULL,
@@ -129,14 +131,14 @@ DEFAULT COLLATE=latin1_general_cs
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>43</xloc>
-      <yloc>97</yloc>
+      <yloc>101</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Extract Movies</name>
-    <type>ScriptValueMod</type>
+    <name>Filter matched rows</name>
+    <type>FilterRows</type>
     <description/>
     <distribute>N</distribute>
     <copies>1</copies>
@@ -144,179 +146,93 @@ DEFAULT COLLATE=latin1_general_cs
            <method>none</method>
            <schema_name/>
            </partitioning>
-    <compatible>Y</compatible>
-    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>
-var status= 0;
-var have_match= &quot;match&quot;;
-
-var movie_string= line_text.getString();
-var movie_id= &apos;&apos;;
-var movie_years= &apos;&apos;;
-var extra_info= &apos;&apos;;
-
-var movie_title= &apos;&apos;;
-var movie_year= &apos;&apos;;
-var movie_part= &apos;&apos;;
-var type= &apos;&apos;;
-var movie_subtitle= &apos;&apos;;
-var suspended= &apos;&apos;;
-
-var movie_subtitle_text= &apos;&apos;;
-var movie_subtitle_episode= &apos;&apos;;
-
-if(
-  movie_string.match(
-    &#47;^([^\t]+)\t+(([^\t\(\)]+)(\t+\(([^\t]+)\))?)?$&#47;
-&#47;&#47;    1     \1   23         \34     5     \5 \4\2
-  )
-){
-  status= 1;
-  movie_id= RegExp.$1;
-  movie_years= RegExp.$3;
-  extra_info= RegExp.$5;
-  if(
-    movie_id.match(
-      &#47;^(.+) \(([0-9\?]{4})(\&#47;[IVX]+)?\)( \((TV|VG|V|mini)\))?( \{([^\{\}]+)\})?( \{\{SUSPENDED\}\})?$&#47;
-&#47;&#47;      1      2         \23       \3   4   5           \5 \4 6   7       \7 \6 8
-    )
-  ){
-    status= 2;    
-    movie_title= (title_quoted = (RegExp.$1.charAt(0)==&apos;&quot;&apos;))
-    ? RegExp.$1.substr(1, RegExp.$1.length -2)
-    : RegExp.$1
-    ;
-
-    movie_year= RegExp.$2;
-    movie_part= (RegExp.$3==&apos;&apos;)
-    ? &apos;&apos;
-    : RegExp.$3.substr(1);
-    ;
-
-    switch(RegExp.$5){
-      case &apos;TV&apos;:
-        type= &apos;television movie&apos;;
-        break;
-      case &apos;VG&apos;:
-        type= &apos;video game&apos;;
-        break;
-      case &apos;V&apos;:
-        type= &apos;video&apos;;
-        break;
-      case &apos;mini&apos;:
-        type= &apos;mini-series&apos;;
-        break;
-      default:
-        type= title_quoted
-        ? &apos;television series&apos;
-        : &apos;cinematic movie&apos;
-        ;
-    }
-    suspended= (RegExp.$8==&apos;&apos;?&apos;no&apos;:&apos;yes&apos;);
-
-    movie_subtitle= RegExp.$7;   
-    if(
-      movie_subtitle.match(
-        &#47;^([^\(]+)( \(([^\)]+)\))$&#47;
-&#47;&#47;        1 \12   3   \3 \2
-      )
-    ){
-      movie_subtitle_text= RegExp.$1;
-      movie_subtitle_episode= RegExp.$3;
-      status= 3;
-    } else if(
-      movie_subtitle.match(
-        &#47;^\(([^\)]+)\)$&#47;
-&#47;&#47;          1   \1
-      )
-    ){
-      status= 4;
-      movie_subtitle_text= &apos;&apos;;
-      movie_subtitle_episode= RegExp.$1;
-    } else {
-      status= 5;
-      movie_subtitle_text= movie_subtitle;
-      movie_subtitle_episode= &apos;&apos;;
-    }
-  } else {
-    have_match= &quot;no match&quot;;
-  }
-} else {
-  have_match= &quot;no match&quot;;
-}
-
-</jsScript_script>
-      </jsScript>    </jsScripts>    <fields>      <field>        <name>status</name>
-        <rename>status</rename>
-        <type>Number</type>
-        <length>16</length>
-        <precision>2</precision>
-      </field>      <field>        <name>have_match</name>
-        <rename>have_match</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>movie_years</name>
-        <rename>years</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>extra_info</name>
-        <rename>extra</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>movie_title</name>
-        <rename>title</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>movie_year</name>
-        <rename>year</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>movie_part</name>
-        <rename>part</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>type</name>
-        <rename>type</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>suspended</name>
-        <rename>suspended</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>movie_subtitle_text</name>
-        <rename>subtitle</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>movie_subtitle_episode</name>
-        <rename>episode</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>movie_id</name>
-        <rename>movie_id</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>    </fields>     <cluster_schema/>
+<send_true_to>Select values</send_true_to>
+<send_false_to>excluded</send_false_to>
+    <compare>
+<condition>
+ <negated>N</negated>
+ <leftvalue>have_match</leftvalue>
+ <function>=</function>
+ <rightvalue/>
+ <value><name>constant</name><type>String</type><text>match</text><length>-1</length><precision>-1</precision><isnull>N</isnull></value> </condition>
+    </compare>
+     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>265</xloc>
-      <yloc>100</yloc>
+      <xloc>363</xloc>
+      <yloc>101</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Movie  Errors</name>
+    <name>Select values</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>      <field>        <name>line_text</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>line_number</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>years</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>extra</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>title</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>year</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>part</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>type</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>suspended</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>subtitle</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>episode</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>movie_id</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>        <select_unspecified>N</select_unspecified>
+    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>464</xloc>
+      <yloc>102</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>excluded</name>
     <type>TextFileOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -335,7 +251,319 @@ if(
     <encoding/>
     <endedLine/>
     <file>
-      <name>${Internal.Transformation.Filename.Directory}&#47;..&#47;errors&#47;movies</name>
+      <name>${Internal.Transformation.Filename.Directory}${file.separator}..${file.separator}..${file.separator}excluded${file.separator}${Internal.Transformation.Name}</name>
+      <is_command>N</is_command>
+      <extention>txt</extention>
+      <append>N</append>
+      <split>N</split>
+      <haspartno>N</haspartno>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <pad>N</pad>
+      <fast_dump>N</fast_dump>
+      <splitevery>0</splitevery>
+      </file>
+    <fields>
+      <field>
+        <name>line_text</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>line_number</name>
+        <type>Integer</type>
+        <format>0</format>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>status</name>
+        <type>Integer</type>
+        <format>0</format>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>have_match</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>years</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>extra</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>title</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>year</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>part</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>type</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>suspended</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>subtitle</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>episode</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>movie_id</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>365</xloc>
+      <yloc>209</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>input-list</name>
+    <type>TextFileInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <accept_filenames>N</accept_filenames>
+    <accept_field/>
+    <accept_stepname/>
+    <separator>;</separator>
+    <enclosure>&quot;</enclosure>
+    <enclosure_breaks>N</enclosure_breaks>
+    <escapechar/>
+    <header>Y</header>
+    <nr_headerlines>8</nr_headerlines>
+    <footer>Y</footer>
+    <nr_footerlines>2</nr_footerlines>
+    <line_wrapped>N</line_wrapped>
+    <nr_wraps>1</nr_wraps>
+    <layout_paged>N</layout_paged>
+    <nr_lines_per_page>80</nr_lines_per_page>
+    <nr_lines_doc_header>0</nr_lines_doc_header>
+    <noempty>Y</noempty>
+    <include>N</include>
+    <include_field/>
+    <rownum>Y</rownum>
+    <rownumByFile>N</rownumByFile>
+    <rownum_field>line_number</rownum_field>
+    <format>mixed</format>
+    <encoding>ISO-8859-1</encoding>
+    <file>
+      <name>${Internal.Transformation.Filename.Directory}${file.separator}..${file.separator}..${file.separator}input${file.separator}${Internal.Transformation.Name}.list.gz</name>
+      <filemask/>
+      <file_required/>
+      <type>Fixed</type>
+      <compression>GZip</compression>
+    </file>
+    <filters>
+    </filters>
+    <fields>
+      <field>
+        <name>line_text</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <ifnull/>
+        <position>0</position>
+        <length>255</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+        <repeat>N</repeat>
+      </field>
+    </fields>
+    <limit>0</limit>
+    <error_ignored>N</error_ignored>
+    <error_line_skipped>N</error_line_skipped>
+    <error_count_field/>
+    <error_fields_field/>
+    <error_text_field/>
+    <bad_line_files_destination_directory/>
+    <bad_line_files_extension>warning</bad_line_files_extension>
+    <error_line_files_destination_directory/>
+    <error_line_files_extension>error</error_line_files_extension>
+    <line_number_files_destination_directory/>
+    <line_number_files_extension>line</line_number_files_extension>
+    <date_format_lenient>Y</date_format_lenient>
+    <date_format_locale>en_us</date_format_locale>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>158</xloc>
+      <yloc>98</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>output-table</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>imbi_lists</connection>
+    <schema/>
+    <table>${Internal.Transformation.Name}</table>
+    <commit>1000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>553</xloc>
+      <yloc>101</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>rejected</name>
+    <type>TextFileOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <separator>;</separator>
+    <enclosure>&quot;</enclosure>
+    <enclosure_forced>N</enclosure_forced>
+    <header>Y</header>
+    <footer>N</footer>
+    <format>DOS</format>
+    <compression>None</compression>
+    <encoding/>
+    <endedLine/>
+    <file>
+      <name>${Internal.Transformation.Filename.Directory}${file.separator}..${file.separator}..${file.separator}rejected${file.separator}${Internal.Transformation.Name}</name>
       <is_command>N</is_command>
       <extention>txt</extention>
       <append>N</append>
@@ -516,198 +744,15 @@ if(
       </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>552</xloc>
-      <yloc>214</yloc>
+      <xloc>553</xloc>
+      <yloc>201</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Movies.list</name>
-    <type>TextFileInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <accept_filenames>N</accept_filenames>
-    <accept_field/>
-    <accept_stepname/>
-    <separator>;</separator>
-    <enclosure>&quot;</enclosure>
-    <enclosure_breaks>N</enclosure_breaks>
-    <escapechar/>
-    <header>Y</header>
-    <nr_headerlines>8</nr_headerlines>
-    <footer>Y</footer>
-    <nr_footerlines>2</nr_footerlines>
-    <line_wrapped>N</line_wrapped>
-    <nr_wraps>1</nr_wraps>
-    <layout_paged>N</layout_paged>
-    <nr_lines_per_page>80</nr_lines_per_page>
-    <nr_lines_doc_header>0</nr_lines_doc_header>
-    <noempty>Y</noempty>
-    <include>N</include>
-    <include_field/>
-    <rownum>Y</rownum>
-    <rownumByFile>N</rownumByFile>
-    <rownum_field>line_number</rownum_field>
-    <format>mixed</format>
-    <encoding>ISO-8859-1</encoding>
-    <file>
-      <name>${Internal.Transformation.Filename.Directory}&#47;..&#47;input&#47;movies.list.gz</name>
-      <filemask/>
-      <file_required/>
-      <type>Fixed</type>
-      <compression>GZip</compression>
-    </file>
-    <filters>
-    </filters>
-    <fields>
-      <field>
-        <name>line_text</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <ifnull/>
-        <position>0</position>
-        <length>255</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-        <repeat>N</repeat>
-      </field>
-    </fields>
-    <limit>0</limit>
-    <error_ignored>N</error_ignored>
-    <error_line_skipped>N</error_line_skipped>
-    <error_count_field/>
-    <error_fields_field/>
-    <error_text_field/>
-    <bad_line_files_destination_directory/>
-    <bad_line_files_extension>warning</bad_line_files_extension>
-    <error_line_files_destination_directory/>
-    <error_line_files_extension>error</error_line_files_extension>
-    <line_number_files_destination_directory/>
-    <line_number_files_extension>line</line_number_files_extension>
-    <date_format_lenient>Y</date_format_lenient>
-    <date_format_locale>en_us</date_format_locale>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>158</xloc>
-      <yloc>98</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Select values 1</name>
-    <type>SelectValues</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <fields>      <field>        <name>line_text</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>line_number</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>years</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>extra</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>title</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>year</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>part</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>type</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>suspended</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>subtitle</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>episode</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>      <field>        <name>movie_id</name>
-        <rename/>
-        <length>-2</length>
-        <precision>-2</precision>
-      </field>        <select_unspecified>N</select_unspecified>
-    </fields>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>453</xloc>
-      <yloc>99</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>ods_movie</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>imdb</connection>
-    <schema/>
-    <table>ods_movie</table>
-    <commit>10000</commit>
-    <truncate>N</truncate>
-    <ignore_errors>N</ignore_errors>
-    <use_batch>Y</use_batch>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_field/>
-    <tablename_in_table>Y</tablename_in_table>
-    <return_keys>N</return_keys>
-    <return_field/>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>551</xloc>
-      <yloc>99</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Filter matched rows</name>
-    <type>FilterRows</type>
+    <name>transform</name>
+    <type>ScriptValueMod</type>
     <description/>
     <distribute>N</distribute>
     <copies>1</copies>
@@ -715,224 +760,181 @@ if(
            <method>none</method>
            <schema_name/>
            </partitioning>
-<send_true_to>Select values 1</send_true_to>
-<send_false_to>Excluded Movies</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>have_match</leftvalue>
- <function>=</function>
- <rightvalue/>
- <value><name>constant</name><type>String</type><text>match</text><length>-1</length><precision>-1</precision><isnull>N</isnull></value> </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>363</xloc>
-      <yloc>101</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
+    <compatible>Y</compatible>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>
+var status= 0;
+var have_match= &quot;match&quot;;
 
-  <step>
-    <name>Excluded Movies</name>
-    <type>TextFileOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <separator>;</separator>
-    <enclosure>&quot;</enclosure>
-    <enclosure_forced>N</enclosure_forced>
-    <header>Y</header>
-    <footer>N</footer>
-    <format>DOS</format>
-    <compression>None</compression>
-    <encoding/>
-    <endedLine/>
-    <file>
-      <name>${Internal.Transformation.Filename.Directory}&#47;..&#47;excluded&#47;movies</name>
-      <is_command>N</is_command>
-      <extention>txt</extention>
-      <append>N</append>
-      <split>N</split>
-      <haspartno>N</haspartno>
-      <add_date>N</add_date>
-      <add_time>N</add_time>
-      <pad>N</pad>
-      <fast_dump>N</fast_dump>
-      <splitevery>0</splitevery>
-      </file>
-    <fields>
-      <field>
-        <name>line_text</name>
+var movie_string= line_text.getString();
+var movie_id= &apos;&apos;;
+var movie_years= &apos;&apos;;
+var extra_info= &apos;&apos;;
+
+var movie_title= &apos;&apos;;
+var movie_year= &apos;&apos;;
+var movie_part= &apos;&apos;;
+var type= &apos;&apos;;
+var movie_subtitle= &apos;&apos;;
+var suspended= &apos;&apos;;
+
+var movie_subtitle_text= &apos;&apos;;
+var movie_subtitle_episode= &apos;&apos;;
+
+if(
+  movie_string.match(
+    &#47;^([^\t]+)\t+(([^\t\(\)]+)(\t+\(([^\t]+)\))?)?$&#47;
+&#47;&#47;    1     \1   23         \34     5     \5 \4\2
+  )
+){
+  status= 1;
+  movie_id= RegExp.$1;
+  movie_years= RegExp.$3;
+  extra_info= RegExp.$5;
+  if(
+    movie_id.match(
+      &#47;^(.+) \(([0-9\?]{4})(\&#47;[IVX]+)?\)( \((TV|VG|V|mini)\))?( \{([^\{\}]+)\})?( \{\{SUSPENDED\}\})?$&#47;
+&#47;&#47;      1      2         \23       \3   4   5           \5 \4 6   7       \7 \6 8
+    )
+  ){
+    status= 2;    
+    movie_title= (title_quoted = (RegExp.$1.charAt(0)==&apos;&quot;&apos;))
+    ? RegExp.$1.substr(1, RegExp.$1.length -2)
+    : RegExp.$1
+    ;
+
+    movie_year= RegExp.$2;
+    movie_part= (RegExp.$3==&apos;&apos;)
+    ? &apos;&apos;
+    : RegExp.$3.substr(1);
+    ;
+
+    switch(RegExp.$5){
+      case &apos;TV&apos;:
+        type= &apos;television movie&apos;;
+        break;
+      case &apos;VG&apos;:
+        type= &apos;video game&apos;;
+        break;
+      case &apos;V&apos;:
+        type= &apos;video&apos;;
+        break;
+      case &apos;mini&apos;:
+        type= &apos;mini-series&apos;;
+        break;
+      default:
+        type= title_quoted
+        ? &apos;television series&apos;
+        : &apos;cinematic movie&apos;
+        ;
+    }
+    suspended= (RegExp.$8==&apos;&apos;?&apos;no&apos;:&apos;yes&apos;);
+
+    movie_subtitle= RegExp.$7;   
+    if(
+      movie_subtitle.match(
+        &#47;^([^\(]+)( \(([^\)]+)\))$&#47;
+&#47;&#47;        1 \12   3   \3 \2
+      )
+    ){
+      movie_subtitle_text= RegExp.$1;
+      movie_subtitle_episode= RegExp.$3;
+      status= 3;
+    } else if(
+      movie_subtitle.match(
+        &#47;^\(([^\)]+)\)$&#47;
+&#47;&#47;          1   \1
+      )
+    ){
+      status= 4;
+      movie_subtitle_text= &apos;&apos;;
+      movie_subtitle_episode= RegExp.$1;
+    } else {
+      status= 5;
+      movie_subtitle_text= movie_subtitle;
+      movie_subtitle_episode= &apos;&apos;;
+    }
+  } else {
+    have_match= &quot;no match&quot;;
+  }
+} else {
+  have_match= &quot;no match&quot;;
+}
+
+</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>status</name>
+        <rename>status</rename>
+        <type>Number</type>
+        <length>16</length>
+        <precision>2</precision>
+      </field>      <field>        <name>have_match</name>
+        <rename>have_match</rename>
         <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
-      <field>
-        <name>line_number</name>
-        <type>Integer</type>
-        <format>0</format>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <length>-1</length>
-        <precision>-1</precision>
-        </field>
-      <field>
-        <name>status</name>
-        <type>Integer</type>
-        <format>0</format>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <length>-1</length>
-        <precision>-1</precision>
-        </field>
-      <field>
-        <name>have_match</name>
+      </field>      <field>        <name>movie_years</name>
+        <rename>years</rename>
         <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
-      <field>
-        <name>years</name>
+      </field>      <field>        <name>extra_info</name>
+        <rename>extra</rename>
         <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
-      <field>
-        <name>extra</name>
+      </field>      <field>        <name>movie_title</name>
+        <rename>title</rename>
         <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
-      <field>
-        <name>title</name>
+      </field>      <field>        <name>movie_year</name>
+        <rename>year</rename>
         <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
-      <field>
-        <name>year</name>
+      </field>      <field>        <name>movie_part</name>
+        <rename>part</rename>
         <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
-      <field>
-        <name>part</name>
+      </field>      <field>        <name>type</name>
+        <rename>type</rename>
         <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
-      <field>
-        <name>type</name>
+      </field>      <field>        <name>suspended</name>
+        <rename>suspended</rename>
         <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
-      <field>
-        <name>suspended</name>
+      </field>      <field>        <name>movie_subtitle_text</name>
+        <rename>subtitle</rename>
         <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
-      <field>
-        <name>subtitle</name>
+      </field>      <field>        <name>movie_subtitle_episode</name>
+        <rename>episode</rename>
         <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
-      <field>
-        <name>episode</name>
+      </field>      <field>        <name>movie_id</name>
+        <rename>movie_id</rename>
         <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
-      <field>
-        <name>movie_id</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <length>-1</length>
-        <precision>-1</precision>
-        </field>
-      </fields>
-     <cluster_schema/>
+      </field>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>365</xloc>
-      <yloc>209</yloc>
+      <xloc>265</xloc>
+      <yloc>100</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step_error_handling>
       <error>
-        <source_step>ods_movie</source_step>
-        <target_step>Movie  Errors</target_step>
+        <source_step>output-table</source_step>
+        <target_step>rejected</target_step>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename>error_description</descriptions_valuename>
