@@ -643,10 +643,12 @@ DEFAULT COLLATE=latin1_general_cs
     <compatible>Y</compatible>
     <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
         <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>var status= 0;
-var have_match= &apos;match&apos;;
+        <jsScript_script>&#47;&#47; Please use these lines in all the &quot;list&quot; transformations
+var status= 0;                               &#47;&#47;assign a numerical constant each time you match a regex. for debugging.
+var have_match= &apos;match&apos;;                     &#47;&#47;set this to &quot;no match&quot; if your script cannot parse the current row.
+var line_text_string= line_text.getString(); &#47;&#47;this is the line of text extracted from the list. Please output this as a field
 
-var release_string= line_text.getString();
+&#47;&#47;put the specific script below:
 var movie_id = &apos;&apos;;
 var country_name = &apos;&apos;; 
 var day_number = &apos;&apos;;
@@ -655,7 +657,7 @@ var year = &apos;&apos;;
 var region_name = &apos;&apos;;
 
 if(
-  release_string.match(
+  line_text_string.match(
     &#47;([^\t]+)\t+(.+):((([0-9]{1,2}) +)?([A-Za-z]+),? *)?([0-9]{4})(\t+\((.+)\))?&#47;i
 &#47;&#47;   1          2    345               6                7         8     9
   )
