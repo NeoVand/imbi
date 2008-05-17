@@ -45,6 +45,13 @@
   <modified_date>2008&#47;05&#47;17 17:57:45.529</modified_date>
   </info>
   <notepads>
+    <notepad>
+      <note>The countries list records the country of origin.</note>
+      <xloc>58</xloc>
+      <yloc>26</yloc>
+      <width>233</width>
+      <heigth>23</heigth>
+    </notepad>
   </notepads>
   <connection>
     <name>imbi_lists</name>
@@ -590,7 +597,7 @@ var country_name = &apos;&apos;;
 
 if(
   line_text_string.match(
-    &#47;([^\t]+)\t+(.+)&#47;i
+    &#47;^([^\t]+)\t+(.+)$&#47;i
 &#47;&#47;   1          2   
   )
 ){
