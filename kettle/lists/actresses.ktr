@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>genres</name>
+    <name>actresses</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -47,10 +47,10 @@
   </info>
   <notepads>
     <notepad>
-      <note>The genres list records the genres which describe the movie</note>
-      <xloc>59</xloc>
-      <yloc>27</yloc>
-      <width>298</width>
+      <note>The countries list records the country of origin.</note>
+      <xloc>58</xloc>
+      <yloc>26</yloc>
+      <width>233</width>
       <heigth>23</heigth>
     </notepad>
   </notepads>
@@ -100,11 +100,15 @@
 ;
 
 CREATE TABLE &quot;${Internal.Transformation.Name}&quot; (
-  line_text    varchar(255)      NOT NULL DEFAULT &apos;&apos;,
-  line_number  int unsigned      NOT NULL DEFAULT 0,
-  movie_id     varchar(255)      NOT NULL DEFAULT 0,
-  genre        varchar(32)                 NOT NULL,
-  primary key(movie_id, genre)
+  line_text        varchar(255)      NOT NULL DEFAULT &apos;&apos;,
+  line_number      int unsigned      NOT NULL DEFAULT 0,
+  movie_id         varchar(255)      NOT NULL DEFAULT 0,
+  first_name       varchar(64)       NOT NULL DEFAULT &apos;&apos;,
+  last_name        varchar(64)       NOT NULL DEFAULT &apos;&apos;,
+  extra            varchar(64)       NOT NULL DEFAULT &apos;&apos;,
+  character_name   varchar(64)       NOT NULL DEFAULT &apos;&apos;,
+  credits_position smallint unsigned NOT NULL DEFAULT 0,
+  primary key(movie_id, first_name, last_name, character_name)
 )
 ENGINE=MyISAM 
 DEFAULT CHARSET=latin1
@@ -135,7 +139,7 @@ DEFAULT COLLATE=latin1_general_cs
            <schema_name/>
            </partitioning>
 <send_true_to>Select values</send_true_to>
-<send_false_to>excluded</send_false_to>
+<send_false_to>Select values</send_false_to>
     <compare>
 <condition>
  <negated>N</negated>
@@ -170,19 +174,35 @@ DEFAULT COLLATE=latin1_general_cs
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
+      </field>      <field>        <name>last_name</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>first_name</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
       </field>      <field>        <name>movie_id</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
-      </field>      <field>        <name>genre</name>
+      </field>      <field>        <name>extra</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>character_name</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>credits_position</name>
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
       </field>        <select_unspecified>N</select_unspecified>
     </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>541</xloc>
-      <yloc>84</yloc>
+      <xloc>646</xloc>
+      <yloc>83</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -245,7 +265,7 @@ DEFAULT COLLATE=latin1_general_cs
       <field>
         <name>status</name>
         <type>Integer</type>
-        <format>0.#####</format>
+        <format>0</format>
         <currency/>
         <decimal/>
         <group/>
@@ -255,6 +275,28 @@ DEFAULT COLLATE=latin1_general_cs
         </field>
       <field>
         <name>have_match</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>line_text_string</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>name</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -276,7 +318,29 @@ DEFAULT COLLATE=latin1_general_cs
         <precision>-1</precision>
         </field>
       <field>
-        <name>genre</name>
+        <name>extra</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>character_name</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>credits_position</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -313,9 +377,9 @@ DEFAULT COLLATE=latin1_general_cs
     <enclosure_breaks>N</enclosure_breaks>
     <escapechar/>
     <header>Y</header>
-    <nr_headerlines>293</nr_headerlines>
+    <nr_headerlines>195</nr_headerlines>
     <footer>Y</footer>
-    <nr_footerlines>0</nr_footerlines>
+    <nr_footerlines>2</nr_footerlines>
     <line_wrapped>N</line_wrapped>
     <nr_wraps>1</nr_wraps>
     <layout_paged>N</layout_paged>
@@ -349,7 +413,7 @@ DEFAULT COLLATE=latin1_general_cs
         <nullif/>
         <ifnull/>
         <position>0</position>
-        <length>300</length>
+        <length>255</length>
         <precision>-1</precision>
         <trim_type>none</trim_type>
         <repeat>N</repeat>
@@ -418,19 +482,41 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
-        <length>255</length>
+        <length>-1</length>
         <precision>-1</precision>
         </field>
       <field>
         <name>line_number</name>
         <type>Integer</type>
+        <format>0</format>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>last_name</name>
+        <type>String</type>
         <format/>
         <currency/>
         <decimal/>
         <group/>
         <nullif/>
-        <length>10</length>
-        <precision>0</precision>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>first_name</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
         </field>
       <field>
         <name>movie_id</name>
@@ -444,7 +530,29 @@ DEFAULT COLLATE=latin1_general_cs
         <precision>-1</precision>
         </field>
       <field>
-        <name>genre</name>
+        <name>extra</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>character_name</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <length>-1</length>
+        <precision>-1</precision>
+        </field>
+      <field>
+        <name>credits_position</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -490,8 +598,8 @@ DEFAULT COLLATE=latin1_general_cs
       </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>645</xloc>
-      <yloc>176</yloc>
+      <xloc>750</xloc>
+      <yloc>175</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -524,8 +632,8 @@ DEFAULT COLLATE=latin1_general_cs
     <return_field/>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>646</xloc>
-      <yloc>81</yloc>
+      <xloc>751</xloc>
+      <yloc>80</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -549,18 +657,40 @@ var have_match= &apos;match&apos;;                     &#47;&#47;set this to &qu
 var line_text_string= line_text.getString(); &#47;&#47;this is the line of text extracted from the list. Please output this as a field
 
 &#47;&#47;put the specific script below:
+var name;
 var movie_id = &apos;&apos;;
-var genre = &apos;&apos;;
+var extra = &apos;&apos;;
+
+var character_name = &apos;&apos;; 
+var credits_position = &apos;&apos;; 
+var first_name= &apos;&apos;;
+var last_name= &apos;&apos;;
 
 if(
   line_text_string.match(
-    &#47;^([^\t]+)\t+(.+)$&#47;i
-&#47;&#47;    1          2
+    &#47;^([^\t]+)?\t+([^ ]+( [^ ]+)*)(  \((.+)\))?(  \[(.+)\])?(  &lt;([0-9]+)&gt;)?$&#47;i
+&#47;&#47;    1     \1    2     3     \3\24    5       6    7       8   9
+&#47;&#47;    &#47;^([^\t]+)?\t+([^ ]+( [^ ]+)*)(  .+)?$&#47;i
   )
 ){
   status= 1;
-  movie_id = RegExp.$1;     &#47;&#47;movie_id
-  genre    = RegExp.$2;     &#47;&#47;genre
+  name = (RegExp.$1==&apos;&apos;?name:RegExp.$1);
+  movie_id = RegExp.$2; &#47;&#47;movie_id
+  extra = RegExp.$5; 
+  character_name = RegExp.$7;
+  credits_position = RegExp.$9==&apos;&apos;?0:RegExp.$9;
+  if(
+    name.match(
+      &#47;^([^,]+)(, (.+))$&#47;
+&#47;&#47;      1   \1 2  3 \3\2
+    )
+  ){
+    last_name= RegExp.$1;
+    first_name= RegExp.$3;
+  } else {
+    last_name= name;
+    first_name= &apos;&apos;;
+  }
 } else {
   &#47;&#47;TODO:discard this row
   have_match= &apos;no match&apos;;
@@ -576,18 +706,33 @@ if(
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
-      </field>      <field>        <name>line_text_string</name>
-        <rename>line_text_string</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
       </field>      <field>        <name>movie_id</name>
         <rename>movie_id</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
-      </field>      <field>        <name>genre</name>
-        <rename>genre</rename>
+      </field>      <field>        <name>extra</name>
+        <rename>extra</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>character_name</name>
+        <rename>character_name</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>credits_position</name>
+        <rename>credits_position</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>first_name</name>
+        <rename>first_name</rename>
+        <type>String</type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>      <field>        <name>last_name</name>
+        <rename>last_name</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
