@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<architect-project version="1.0" appversion="0.9.10">
+ <project-name>imbi_dwh</project-name>
+ <project-data-sources>
+  <data-source id="DS0">
+   <property key="Logical" value="(Target Database)" />
+   <property key="JDBC URL" value="" />
+   <property key="UID" value="" />
+   <property key="PWD" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.database" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.port" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.hostname" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.repos.login" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.repos.password" value="" />
+  </data-source>
+  <data-source id="DS2">
+   <property key="Connection Type" value="MySQL" />
+   <property key="Logical" value="IMBI_DWH" />
+   <property key="JDBC URL" value="jdbc:mysql://:3306/" />
+   <property key="UID" value="" />
+   <property key="PWD" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.database" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.port" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.hostname" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.repos.login" value="" />
+   <property key="ca.sqlpower.architect.etl.kettle.repos.password" value="" />
+  </data-source>
+ </project-data-sources>
+ <source-databases>
+  <database id="DB0" populated="false" dbcs-ref="DS2" name="IMBI_DWH" physicalName="IMBI_DWH" />
+ </source-databases>
+ <target-database dbcs-ref="DS0">
+  <table id="TAB1" populated="true" name="MovieStar" objectType="TABLE" physicalName="moviestar" remarks="" >
+   <folder id="FOL2" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL3" populated="true" autoIncrement="false" autoIncrementSequenceName="MovieStar_moviestar_key_seq" name="moviestar_key" nullable="0" physicalName="moviestar_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL4" populated="true" autoIncrement="false" autoIncrementSequenceName="MovieStar_gender_seq" name="gender" nullable="0" physicalName="gender" precision="1" referenceCount="1" remarks="" scale="0" type="1" />
+    <column id="COL5" populated="true" autoIncrement="false" autoIncrementSequenceName="MovieStar_MovieStar name_seq" name="movieStarName" nullable="0" physicalName="moviestarname" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL6" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL7" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL8" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX9" populated="true" clustered="false" index-type="CLUSTERED" name="MovieStar_pk" physicalName="MovieStar_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC10" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL3" name="moviestar_key" physicalName="moviestar_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB11" populated="true" name="Movie" objectType="TABLE" physicalName="movie" remarks="" >
+   <folder id="FOL12" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL13" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_movie_key_seq" name="movie_key" nullable="0" physicalName="movie_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL14" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_movie_id_seq" name="movie_id" nullable="0" physicalName="movie_id" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL15" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_movieTitle_seq" name="movieTitle" nullable="0" physicalName="movietitle" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL16" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_releaseYear_seq" name="releaseYear" nullable="0" physicalName="releaseyear" precision="4" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL17" populated="true" autoIncrement="false" autoIncrementSequenceName="MovieType_New_Column_seq" name="movieType_key" nullable="0" physicalName="movietype_key" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL18" populated="true" autoIncrement="false" autoIncrementSequenceName="Genre_genre_key_seq" name="genre_key" nullable="0" physicalName="genre_key" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL19" populated="true" autoIncrement="false" autoIncrementSequenceName="Color_color_key_seq" name="color_key" nullable="0" physicalName="color_key" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+   </folder>
+   <folder id="FOL20" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL21" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL22" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX23" populated="true" clustered="false" index-type="CLUSTERED" name="Movie_pk" physicalName="Movie_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC24" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL13" name="movie_key" physicalName="movie_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB25" populated="true" name="Cast" objectType="TABLE" physicalName="cast" remarks="" >
+   <folder id="FOL26" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL27" populated="true" autoIncrement="false" autoIncrementSequenceName="Cast_characterName_seq" name="characterName" nullable="0" physicalName="charactername" precision="250" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL28" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_New_Column_seq" name="movie_key" nullable="0" physicalName="movie_key" precision="10" primaryKeySeq="1" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL29" populated="true" autoIncrement="false" autoIncrementSequenceName="MovieStar_New_Column_seq" name="moviestar_key" nullable="0" physicalName="moviestar_key" precision="10" primaryKeySeq="2" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL30" populated="true" autoIncrement="false" autoIncrementSequenceName="Cast_credited_seq" name="credited" nullable="0" physicalName="credited" precision="10" referenceCount="1" remarks="" scale="0" type="16" />
+    <column id="COL31" populated="true" autoIncrement="false" autoIncrementSequenceName="Cast_billingPosition_seq" name="billingPosition" nullable="1" physicalName="billingposition" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+   </folder>
+   <folder id="FOL32" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL33" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL34" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX35" populated="true" clustered="false" index-type="CLUSTERED" name="Cast_pk" physicalName="Cast_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC36" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL27" name="characterName" physicalName="CharacterName" />
+     <index-column id="IDC37" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL28" name="movie_key" physicalName="movie_key" />
+     <index-column id="IDC38" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL29" name="moviestar_key" physicalName="moviestar_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB39" populated="true" name="AkaName" objectType="TABLE" physicalName="akaname" remarks="" >
+   <folder id="FOL40" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL41" populated="true" autoIncrement="false" autoIncrementSequenceName="AkaakaName_Name_seq" name="akaName" nullable="0" physicalName="akaname" precision="250" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL42" populated="true" autoIncrement="false" autoIncrementSequenceName="name_AkaName_seq" name="name" nullable="0" physicalName="name" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL43" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL44" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL45" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX46" populated="true" clustered="false" index-type="CLUSTERED" name="AkaName_pk" physicalName="AkaName_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC47" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL41" name="akaName" physicalName="AkaName" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB48" populated="true" name="AkaTitle" objectType="TABLE" physicalName="akatitle" remarks="" >
+   <folder id="FOL49" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL50" populated="true" autoIncrement="false" autoIncrementSequenceName="AkaTitle_movieTitle_seq" name="movieTitle" nullable="0" physicalName="movietitle" precision="250" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL51" populated="true" autoIncrement="false" autoIncrementSequenceName="AkaakaTitle_Title_seq" name="akaTitle" nullable="0" physicalName="akatitle" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL52" populated="true" autoIncrement="false" autoIncrementSequenceName="AkaTitle_reason_seq" name="reason" nullable="0" physicalName="reason" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL53" populated="true" autoIncrement="false" autoIncrementSequenceName="AkaTitle_country_seq" name="country" nullable="0" physicalName="country" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL54" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL55" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL56" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX57" populated="true" clustered="false" index-type="CLUSTERED" name="AkaTitle_pk" physicalName="AkaTitle_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC58" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL50" name="movieTitle" physicalName="MovieTitle" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB59" populated="true" name="Distributor" objectType="TABLE" physicalName="distributor" remarks="" >
+   <folder id="FOL60" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL61" populated="true" autoIncrement="false" autoIncrementSequenceName="Distributor_distributor_key_seq" name="distributor_key" nullable="0" physicalName="distributor_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL62" populated="true" autoIncrement="false" autoIncrementSequenceName="Distributor_distributorName_seq" name="distributorName" nullable="0" physicalName="distributorname" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL63" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL64" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL65" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX66" populated="true" clustered="false" index-type="CLUSTERED" name="Distributor_pk" physicalName="Distributor_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC67" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL61" name="distributor_key" physicalName="distributor_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB68" populated="true" name="MovieDistibutorCountry" objectType="TABLE" physicalName="moviedistibutorcountry" remarks="" >
+   <folder id="FOL69" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL70" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_New_Column_seq" name="movie_key" nullable="0" physicalName="movie_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL71" populated="true" autoIncrement="false" autoIncrementSequenceName="Distributor_New_Column_seq" name="distributor_key" nullable="0" physicalName="distributor_key" precision="10" primaryKeySeq="1" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL72" populated="true" autoIncrement="false" autoIncrementSequenceName="Country_country_key_seq" name="country_key" nullable="0" physicalName="country_key" precision="10" primaryKeySeq="2" referenceCount="1" remarks="" scale="0" type="4" />
+   </folder>
+   <folder id="FOL73" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL74" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL75" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX76" populated="true" clustered="false" index-type="CLUSTERED" name="MovieDistibutorCountry_pk" physicalName="MovieDistibutorCountry_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC77" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL70" name="movie_key" physicalName="movie_key" />
+     <index-column id="IDC78" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL71" name="distributor_key" physicalName="distributor_key" />
+     <index-column id="IDC79" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL72" name="country_key" physicalName="country_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB80" populated="true" name="MovieType" objectType="TABLE" physicalName="movietype" remarks="mini, TV, ..." >
+   <folder id="FOL81" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL82" populated="true" autoIncrement="false" autoIncrementSequenceName="MovieType_movieType_key_seq" name="movieType_key" nullable="0" physicalName="movietype_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL83" populated="true" autoIncrement="false" autoIncrementSequenceName="MovieType_movieTypeName_seq" name="movieTypeName" nullable="0" physicalName="movietypename" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL84" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL85" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL86" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX87" populated="true" clustered="false" index-type="CLUSTERED" name="MovieType_pk" physicalName="MovieType_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC88" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL82" name="movieType_key" physicalName="movietype_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB89" populated="true" name="Keyword" objectType="TABLE" physicalName="keyword" remarks="" >
+   <folder id="FOL90" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL91" populated="true" autoIncrement="false" autoIncrementSequenceName="Keyword_keyword_key_seq" name="keyword_key" nullable="0" physicalName="keyword_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL92" populated="true" autoIncrement="false" autoIncrementSequenceName="keyword_Keyword_seq" name="keyword" nullable="0" physicalName="keyword" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL93" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL94" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL95" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX96" populated="true" clustered="false" index-type="CLUSTERED" name="Keyword_pk" physicalName="Keyword_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC97" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL91" name="keyword_key" physicalName="keyword_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB98" populated="true" name="KeywordMovie" objectType="TABLE" physicalName="keywordmovie" remarks="" >
+   <folder id="FOL99" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL100" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_New_Column_seq" name="movie_key" nullable="0" physicalName="movie_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL101" populated="true" autoIncrement="false" autoIncrementSequenceName="Keyword_New_Column_seq" name="keyword_key" nullable="0" physicalName="keyword_key" precision="10" primaryKeySeq="1" referenceCount="1" remarks="" scale="0" type="4" />
+   </folder>
+   <folder id="FOL102" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL103" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL104" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX105" populated="true" clustered="false" index-type="CLUSTERED" name="KeywordMovie_pk" physicalName="KeywordMovie_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC106" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL100" name="movie_key" physicalName="movie_key" />
+     <index-column id="IDC107" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL101" name="keyword_key" physicalName="keyword_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB108" populated="true" name="Language" objectType="TABLE" physicalName="language" remarks="" >
+   <folder id="FOL109" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL110" populated="true" autoIncrement="false" autoIncrementSequenceName="Language_language_key_seq" name="language_key" nullable="0" physicalName="language_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL111" populated="true" autoIncrement="false" autoIncrementSequenceName="language_Language_seq" name="language" nullable="0" physicalName="language" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL112" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL113" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL114" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX115" populated="true" clustered="false" index-type="CLUSTERED" name="Language_pk" physicalName="Language_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC116" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL110" name="language_key" physicalName="language_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB117" populated="true" name="MovieLanguage" objectType="TABLE" physicalName="movielanguage" remarks="" >
+   <folder id="FOL118" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL119" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_New_Column_seq" name="movie_key" nullable="0" physicalName="movie_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL120" populated="true" autoIncrement="false" autoIncrementSequenceName="Language_New_Column_seq" name="language_key" nullable="0" physicalName="language_key" precision="10" primaryKeySeq="1" referenceCount="1" remarks="" scale="0" type="4" />
+   </folder>
+   <folder id="FOL121" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL122" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL123" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX124" populated="true" clustered="false" index-type="CLUSTERED" name="MovieLanguage_pk" physicalName="MovieLanguage_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC125" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL119" name="movie_key" physicalName="movie_key" />
+     <index-column id="IDC126" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL120" name="language_key" physicalName="language_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB127" populated="true" name="Literature" objectType="TABLE" physicalName="literature" remarks="" >
+   <folder id="FOL128" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL129" populated="true" autoIncrement="false" autoIncrementSequenceName="Literature_literature_key_seq" name="literature_key" nullable="0" physicalName="literature_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL130" populated="true" autoIncrement="false" autoIncrementSequenceName="Literature_ISBN_seq" name="ISBN" nullable="0" physicalName="isbn" precision="10" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL131" populated="true" autoIncrement="false" autoIncrementSequenceName="Literature_authorFirstname_seq" name="authorFirstname" nullable="0" physicalName="authorfirstname" precision="100" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL132" populated="true" autoIncrement="false" autoIncrementSequenceName="Literature_authorLastname_seq" name="authorLastname" nullable="0" physicalName="authorlastname" precision="100" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL133" populated="true" autoIncrement="false" autoIncrementSequenceName="Literature_category_seq" name="category" nullable="0" physicalName="category" precision="100" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL134" populated="true" autoIncrement="false" autoIncrementSequenceName="Literature_title_seq" name="title" nullable="0" physicalName="title" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL135" populated="true" autoIncrement="false" autoIncrementSequenceName="Literature_publisher_seq" name="publisher" nullable="0" physicalName="publisher" precision="100" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL136" populated="true" autoIncrement="false" autoIncrementSequenceName="Literature_publishingDate_seq" name="publishingDate" nullable="0" physicalName="publishingdate" precision="10" referenceCount="1" remarks="" scale="0" type="91" />
+    <column id="COL137" populated="true" autoIncrement="false" autoIncrementSequenceName="Literature_pages_seq" name="pages" nullable="0" physicalName="pages" precision="50" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL138" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL139" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL140" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX141" populated="true" clustered="false" index-type="CLUSTERED" name="Literature_pk" physicalName="Literature_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC142" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL129" name="literature_key" physicalName="Literature_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB143" populated="true" name="MovieLiterature" objectType="TABLE" physicalName="movieliterature" remarks="" >
+   <folder id="FOL144" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL145" populated="true" autoIncrement="false" autoIncrementSequenceName="Literature_Literature_key_seq" name="literature_key" nullable="0" physicalName="literature_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL146" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_New_Column_seq" name="movie_key" nullable="0" physicalName="movie_key" precision="10" primaryKeySeq="1" referenceCount="1" remarks="" scale="0" type="4" />
+   </folder>
+   <folder id="FOL147" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL148" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL149" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX150" populated="true" clustered="false" index-type="CLUSTERED" name="MovieLiterature_pk" physicalName="MovieLiterature_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC151" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL145" name="literature_key" physicalName="Literature_key" />
+     <index-column id="IDC152" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL146" name="movie_key" physicalName="movie_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB153" populated="true" name="Person" objectType="TABLE" physicalName="person" remarks="" >
+   <folder id="FOL154" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL155" populated="true" autoIncrement="false" autoIncrementSequenceName="Person_person_key_seq" name="person_key" nullable="0" physicalName="person_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL156" populated="true" autoIncrement="false" autoIncrementSequenceName="Person_personName_seq" name="personName" nullable="0" physicalName="personname" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL157" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL158" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL159" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX160" populated="true" clustered="false" index-type="CLUSTERED" name="Person_pk" physicalName="Person_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC161" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL155" name="person_key" physicalName="person_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB162" populated="true" name="MoviePersonRole" objectType="TABLE" physicalName="moviepersonrole" remarks="" >
+   <folder id="FOL163" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL164" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_New_Column_seq" name="movie_key" nullable="0" physicalName="movie_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL165" populated="true" autoIncrement="false" autoIncrementSequenceName="PersonRole_role_key_seq" name="role_key" nullable="0" physicalName="role_key" precision="10" primaryKeySeq="1" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL166" populated="true" autoIncrement="false" autoIncrementSequenceName="Person_New_Column_seq" name="person_key" nullable="0" physicalName="person_key" precision="10" primaryKeySeq="2" referenceCount="1" remarks="" scale="0" type="4" />
+   </folder>
+   <folder id="FOL167" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL168" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL169" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX170" populated="true" clustered="false" index-type="CLUSTERED" name="MoviePersonRole_pk" physicalName="MoviePersonRole_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC171" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL164" name="movie_key" physicalName="movie_key" />
+     <index-column id="IDC172" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL165" name="role_key" physicalName="role_key" />
+     <index-column id="IDC173" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL166" name="person_key" physicalName="person_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB174" populated="true" name="Released" objectType="TABLE" physicalName="released" remarks="" >
+   <folder id="FOL175" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL176" populated="true" autoIncrement="false" autoIncrementSequenceName="Released_ReleasedNumber_seq" name="releaseNumber" nullable="0" physicalName="releasenumber" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL177" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_New_Column_seq" name="movie_key" nullable="0" physicalName="movie_key" precision="10" primaryKeySeq="1" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL178" populated="true" autoIncrement="false" autoIncrementSequenceName="Released_ReleasedYear_seq" name="releaseYear" nullable="0" physicalName="releaseyear" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL179" populated="true" autoIncrement="false" autoIncrementSequenceName="Released_ReleasedMonth_seq" name="releaseMonth" nullable="1" physicalName="releasemonth" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL180" populated="true" autoIncrement="false" autoIncrementSequenceName="Released_ReleasedDay_seq" name="releaseDay" nullable="1" physicalName="releaseday" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL181" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_runningTime_seq" name="runningTime" nullable="1" physicalName="runningtime" precision="10" referenceCount="1" remarks="in minutes" scale="0" type="4" />
+    <column id="COL182" populated="true" autoIncrement="false" autoIncrementSequenceName="Country_country_key_seq" name="country_key" nullable="0" physicalName="country_key" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+   </folder>
+   <folder id="FOL183" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL184" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL185" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX186" populated="true" clustered="false" index-type="CLUSTERED" name="Released_pk" physicalName="Release_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC187" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL176" name="releaseNumber" physicalName="ReleaseNumber" />
+     <index-column id="IDC188" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL177" name="movie_key" physicalName="movie_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB189" populated="true" name="PersonRole" objectType="TABLE" physicalName="personrole" remarks="Director, Gaffer, Composer, ..." >
+   <folder id="FOL190" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL191" populated="true" autoIncrement="false" autoIncrementSequenceName="PersonRole_role_key_seq" name="role_key" nullable="0" physicalName="role_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL192" populated="true" autoIncrement="false" autoIncrementSequenceName="PersonRole_role_seq" name="role" nullable="0" physicalName="role" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL193" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL194" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL195" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX196" populated="true" clustered="false" index-type="CLUSTERED" name="PersonRole_pk" physicalName="PersonRole_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC197" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL191" name="role_key" physicalName="role_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB198" populated="true" name="MovieRanking" objectType="TABLE" physicalName="movieranking" remarks="" >
+   <folder id="FOL199" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL200" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_movie_key_seq" name="movie_key" nullable="0" physicalName="movie_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL201" populated="true" autoIncrement="false" autoIncrementSequenceName="MovieRanking_startdate_seq" name="startdate" nullable="0" physicalName="startdate" precision="10" primaryKeySeq="1" referenceCount="1" remarks="" scale="0" type="91" />
+    <column id="COL202" populated="true" autoIncrement="false" autoIncrementSequenceName="MovieRanking_enddate_seq" name="enddate" nullable="0" physicalName="enddate" precision="10" referenceCount="1" remarks="" scale="0" type="91" />
+    <column id="COL203" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_rank_seq" name="rank" nullable="0" physicalName="rank" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL204" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_votes_seq" name="votes" nullable="0" physicalName="votes" precision="10" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL205" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_voteDistribution_seq" name="voteDistribution" nullable="0" physicalName="votedistribution" precision="10" referenceCount="1" remarks="" scale="0" type="1" />
+   </folder>
+   <folder id="FOL206" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL207" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL208" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX209" populated="true" clustered="false" index-type="CLUSTERED" name="MovieRanking_pk" physicalName="MovieRanking_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC210" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL200" name="movie_key" physicalName="movie_key" />
+     <index-column id="IDC211" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL201" name="startdate" physicalName="startdate" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB212" populated="true" name="MovieLink" objectType="TABLE" physicalName="movielink" remarks="" >
+   <folder id="FOL213" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL214" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_movie_key_seq" name="movie_key" nullable="0" physicalName="movie_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL215" populated="true" autoIncrement="false" autoIncrementSequenceName="linked_movie_key_seq" name="linked_movie_key" nullable="0" physicalName="linked_movie_key" precision="10" primaryKeySeq="1" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL216" populated="true" autoIncrement="false" autoIncrementSequenceName="MovieLinkType_movie_link_type_key_seq" name="movie_link_type_key" nullable="0" physicalName="movie_link_type_key" precision="10" primaryKeySeq="2" referenceCount="1" remarks="" scale="0" type="4" />
+   </folder>
+   <folder id="FOL217" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL218" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL219" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX220" populated="true" clustered="false" name="MovieLink_pk" physicalName="MovieLink_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC221" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL214" name="movie_key" physicalName="movie_key" />
+     <index-column id="IDC222" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL215" name="linked_movie_key" physicalName="linked_movie_key" />
+     <index-column id="IDC223" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL216" name="movie_link_type_key" physicalName="movie_link_type_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB224" populated="true" name="MovieLinkType" objectType="TABLE" physicalName="movielinktype" remarks="" >
+   <folder id="FOL225" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL226" populated="true" autoIncrement="false" autoIncrementSequenceName="MovieLinkType_movie_link_type_key_seq" name="movie_link_type_key" nullable="0" physicalName="movie_link_type_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL227" populated="true" autoIncrement="false" autoIncrementSequenceName="MovieLinkType_movie_link_type_seq" name="movie_link_type" nullable="0" physicalName="movie_link_type" precision="100" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL228" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL229" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL230" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX231" populated="true" clustered="false" name="MovieLinkType_pk" physicalName="MovieLinkType_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC232" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL226" name="movie_link_type_key" physicalName="movie_link_type_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB233" populated="true" name="Genre" objectType="TABLE" physicalName="genre" remarks="" >
+   <folder id="FOL234" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL235" populated="true" autoIncrement="false" autoIncrementSequenceName="Genre_genre_key_seq" name="genre_key" nullable="0" physicalName="genre_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL236" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_genre_seq" name="genre" nullable="0" physicalName="genre" precision="100" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL237" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL238" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL239" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX240" populated="true" clustered="false" name="Genre_pk" physicalName="Genre_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC241" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL235" name="genre_key" physicalName="genre_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB242" populated="true" name="Country" objectType="TABLE" physicalName="country" remarks="" >
+   <folder id="FOL243" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL244" populated="true" autoIncrement="false" autoIncrementSequenceName="Country_country_key_seq" name="country_key" nullable="0" physicalName="country_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL245" populated="true" autoIncrement="false" autoIncrementSequenceName="Released_country_seq" name="country" nullable="0" physicalName="country" precision="100" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL246" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL247" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL248" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX249" populated="true" clustered="false" name="Country_pk" physicalName="Country_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC250" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL244" name="country_key" physicalName="country_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB251" populated="true" name="Rating" objectType="TABLE" physicalName="rating" remarks="" >
+   <folder id="FOL252" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL253" populated="true" autoIncrement="false" autoIncrementSequenceName="Released_ReleasedNumber_seq" name="releaseNumber" nullable="0" physicalName="releasenumber" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL254" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_New_Column_seq" name="movie_key" nullable="0" physicalName="movie_key" precision="10" primaryKeySeq="1" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL255" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_rating_seq" name="rating" nullable="0" physicalName="rating" precision="50" referenceCount="1" remarks="" scale="0" type="12" />
+    <column id="COL256" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_ratingReason_seq" name="ratingReason" nullable="0" physicalName="ratingreason" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL257" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL258" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL259" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX260" populated="true" clustered="false" name="Rating_pk" physicalName="Rating_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC261" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL253" name="releaseNumber" physicalName="releaseNumber" />
+     <index-column id="IDC262" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL254" name="movie_key" physicalName="movie_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB263" populated="true" name="Color" objectType="TABLE" physicalName="color" remarks="" >
+   <folder id="FOL264" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL265" populated="true" autoIncrement="false" autoIncrementSequenceName="Color_color_key_seq" name="color_key" nullable="0" physicalName="color_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL266" populated="true" autoIncrement="false" autoIncrementSequenceName="Color_color_seq" name="color" nullable="0" physicalName="color" precision="100" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL267" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL268" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL269" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX270" populated="true" clustered="false" name="Color_pk" physicalName="Color_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC271" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL265" name="color_key" physicalName="color_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB272" populated="true" name="ProductionCompany" objectType="TABLE" physicalName="productioncompany" remarks="" >
+   <folder id="FOL273" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL274" populated="true" autoIncrement="false" autoIncrementSequenceName="ProductionCompany_productionCompany_key_seq" name="productionCompany_key" nullable="0" physicalName="productioncompany_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL275" populated="true" autoIncrement="false" autoIncrementSequenceName="ProductionCompany_productionCompany_seq" name="productionCompany" nullable="0" physicalName="productioncompany" precision="250" referenceCount="1" remarks="" scale="0" type="12" />
+   </folder>
+   <folder id="FOL276" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL277" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL278" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX279" populated="true" clustered="false" name="ProductionCompany_pk" physicalName="ProductionCompany_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC280" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL274" name="productionCompany_key" physicalName="productionCompany_key" />
+    </index>
+   </folder>
+  </table>
+  <table id="TAB281" populated="true" name="MovieProductionCompany" objectType="TABLE" physicalName="movieproductioncompany" remarks="" >
+   <folder id="FOL282" populated="true" name="Columns" physicalName="Columns" type="1" >
+    <column id="COL283" populated="true" autoIncrement="false" autoIncrementSequenceName="ProductionCompany_productionCompany_key_seq" name="productionCompany_key" nullable="0" physicalName="productioncompany_key" precision="10" primaryKeySeq="0" referenceCount="1" remarks="" scale="0" type="4" />
+    <column id="COL284" populated="true" autoIncrement="false" autoIncrementSequenceName="Movie_movie_key_seq" name="movie_key" nullable="0" physicalName="movie_key" precision="10" primaryKeySeq="1" referenceCount="1" remarks="" scale="0" type="4" />
+   </folder>
+   <folder id="FOL285" populated="true" name="Exported Keys" physicalName="Exported Keys" type="3" >
+   </folder>
+   <folder id="FOL286" populated="true" name="Imported Keys" physicalName="Imported Keys" type="2" >
+   </folder>
+   <folder id="FOL287" populated="true" name="Indices" physicalName="Indices" type="4" >
+    <index id="IDX288" populated="true" clustered="false" name="MovieProductionCompany_pk" physicalName="MovieProductionCompany_pk" primaryKeyIndex="true" unique="true" >
+     <index-column id="IDC289" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL283" name="productionCompany_key" physicalName="productionCompany_key" />
+     <index-column id="IDC290" populated="true" ascendingOrDescending="UNSPECIFIED" column-ref="COL284" name="movie_key" physicalName="movie_key" />
+    </index>
+   </folder>
+  </table>
+  <relationships>
+   <relationship id="REL291" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB25" fkCardinality="6" identifying="true" name="Actor_Cast_fk" physicalName="actor_cast_fk" pk-table-ref="TAB1" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP292" populated="true" fk-column-ref="COL29" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL3" />
+   </relationship>
+   <relationship id="REL293" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB25" fkCardinality="6" identifying="true" name="Movie_Cast_fk" physicalName="movie_cast_fk" pk-table-ref="TAB11" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP294" populated="true" fk-column-ref="COL28" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL13" />
+   </relationship>
+   <relationship id="REL295" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB68" fkCardinality="6" identifying="true" name="Movie_MovieDistibutorCountry_fk" physicalName="movie_moviedistibutorcountry_fk" pk-table-ref="TAB11" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP296" populated="true" fk-column-ref="COL70" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL13" />
+   </relationship>
+   <relationship id="REL297" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB98" fkCardinality="6" identifying="true" name="Movie_KeywordMovie_fk" physicalName="movie_keywordmovie_fk" pk-table-ref="TAB11" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP298" populated="true" fk-column-ref="COL100" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL13" />
+   </relationship>
+   <relationship id="REL299" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB117" fkCardinality="6" identifying="true" name="Movie_MovieLanguage_fk" physicalName="movie_movielanguage_fk" pk-table-ref="TAB11" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP300" populated="true" fk-column-ref="COL119" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL13" />
+   </relationship>
+   <relationship id="REL301" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB143" fkCardinality="6" identifying="true" name="Movie_MovieLiterature_fk" physicalName="movie_movieliterature_fk" pk-table-ref="TAB11" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP302" populated="true" fk-column-ref="COL146" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL13" />
+   </relationship>
+   <relationship id="REL303" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB162" fkCardinality="6" identifying="true" name="Movie_MoviePersonRole_fk" physicalName="movie_moviepersonrole_fk" pk-table-ref="TAB11" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP304" populated="true" fk-column-ref="COL164" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL13" />
+   </relationship>
+   <relationship id="REL305" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB174" fkCardinality="6" identifying="true" name="Movie_Release_fk" physicalName="movie_release_fk" pk-table-ref="TAB11" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP306" populated="true" fk-column-ref="COL177" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL13" />
+   </relationship>
+   <relationship id="REL307" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB198" fkCardinality="6" identifying="true" name="Movie_MovieRanking_fk" physicalName="movie_movieranking_fk" pk-table-ref="TAB11" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP308" populated="true" fk-column-ref="COL200" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL13" />
+   </relationship>
+   <relationship id="REL309" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB212" fkCardinality="6" identifying="true" name="Movie_MovieRelation_fk" physicalName="movie_movierelation_fk" pk-table-ref="TAB11" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP310" populated="true" fk-column-ref="COL214" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL13" />
+   </relationship>
+   <relationship id="REL311" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB212" fkCardinality="6" identifying="true" name="movie_movierelation_fk_1" physicalName="movie_movierelation_fk_1" pk-table-ref="TAB11" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP312" populated="true" fk-column-ref="COL215" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL13" />
+   </relationship>
+   <relationship id="REL313" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB281" fkCardinality="6" identifying="true" name="Movie_MovieProductionCompany_fk" physicalName="movie_movieproductioncompany_fk" pk-table-ref="TAB11" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP314" populated="true" fk-column-ref="COL284" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL13" />
+   </relationship>
+   <relationship id="REL315" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB11" fkCardinality="6" identifying="false" name="MovieType_Movie_fk" physicalName="movietype_movie_fk" pk-table-ref="TAB80" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP316" populated="true" fk-column-ref="COL17" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL82" />
+   </relationship>
+   <relationship id="REL317" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB11" fkCardinality="7" identifying="false" name="Genre_Movie_fk" physicalName="genre_movie_fk" pk-table-ref="TAB233" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP318" populated="true" fk-column-ref="COL18" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL235" />
+   </relationship>
+   <relationship id="REL319" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB11" fkCardinality="6" identifying="false" name="Color_Movie_fk" physicalName="color_movie_fk" pk-table-ref="TAB263" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP320" populated="true" fk-column-ref="COL19" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL265" />
+   </relationship>
+   <reference ref-id="REL291" />
+   <reference ref-id="REL293" />
+   <relationship id="REL321" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB68" fkCardinality="6" identifying="true" name="Distributor_MovieDistibutorCountry_fk" physicalName="distributor_moviedistibutorcountry_fk" pk-table-ref="TAB59" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP322" populated="true" fk-column-ref="COL71" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL61" />
+   </relationship>
+   <reference ref-id="REL295" />
+   <reference ref-id="REL321" />
+   <relationship id="REL323" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB68" fkCardinality="6" identifying="true" name="Country_MovieDistibutorCountry_fk" physicalName="country_moviedistibutorcountry_fk" pk-table-ref="TAB242" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP324" populated="true" fk-column-ref="COL72" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL244" />
+   </relationship>
+   <reference ref-id="REL315" />
+   <relationship id="REL325" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB98" fkCardinality="6" identifying="true" name="Keyword_KeywordMovie_fk" physicalName="keyword_keywordmovie_fk" pk-table-ref="TAB89" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP326" populated="true" fk-column-ref="COL101" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL91" />
+   </relationship>
+   <reference ref-id="REL297" />
+   <reference ref-id="REL325" />
+   <relationship id="REL327" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB117" fkCardinality="6" identifying="true" name="Language_MovieLanguage_fk" physicalName="language_movielanguage_fk" pk-table-ref="TAB108" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP328" populated="true" fk-column-ref="COL120" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL110" />
+   </relationship>
+   <reference ref-id="REL299" />
+   <reference ref-id="REL327" />
+   <relationship id="REL329" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB143" fkCardinality="6" identifying="true" name="Literature_MovieLiterature_fk" physicalName="literature_movieliterature_fk" pk-table-ref="TAB127" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP330" populated="true" fk-column-ref="COL145" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL129" />
+   </relationship>
+   <reference ref-id="REL301" />
+   <reference ref-id="REL329" />
+   <relationship id="REL331" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB162" fkCardinality="6" identifying="true" name="Person_MoviePersonRole_fk" physicalName="person_moviepersonrole_fk" pk-table-ref="TAB153" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP332" populated="true" fk-column-ref="COL166" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL155" />
+   </relationship>
+   <reference ref-id="REL303" />
+   <reference ref-id="REL331" />
+   <relationship id="REL333" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB162" fkCardinality="6" identifying="true" name="PersonRole_MoviePersonRole_fk" physicalName="personrole_moviepersonrole_fk" pk-table-ref="TAB189" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP334" populated="true" fk-column-ref="COL165" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL191" />
+   </relationship>
+   <relationship id="REL335" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB251" fkCardinality="7" identifying="true" name="Released_Rating_fk" physicalName="released_rating_fk" pk-table-ref="TAB174" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP336" populated="true" fk-column-ref="COL253" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL176" />
+    <column-mapping id="CMP337" populated="true" fk-column-ref="COL254" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL177" />
+   </relationship>
+   <reference ref-id="REL305" />
+   <relationship id="REL338" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB174" fkCardinality="6" identifying="false" name="Country_Released_fk" physicalName="country_released_fk" pk-table-ref="TAB242" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP339" populated="true" fk-column-ref="COL182" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL244" />
+   </relationship>
+   <reference ref-id="REL333" />
+   <reference ref-id="REL307" />
+   <reference ref-id="REL309" />
+   <reference ref-id="REL311" />
+   <relationship id="REL340" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB212" fkCardinality="6" identifying="true" name="MovieRelationType_MovieRelation_fk" physicalName="movierelationtype_movierelation_fk" pk-table-ref="TAB224" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP341" populated="true" fk-column-ref="COL216" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL226" />
+   </relationship>
+   <reference ref-id="REL340" />
+   <reference ref-id="REL317" />
+   <reference ref-id="REL323" />
+   <reference ref-id="REL338" />
+   <reference ref-id="REL335" />
+   <reference ref-id="REL319" />
+   <relationship id="REL342" populated="true" deferrability="7" deleteRule="0" fk-table-ref="TAB281" fkCardinality="6" identifying="true" name="ProductionCompany_MovieProductionCompany_fk" physicalName="productioncompany_movieproductioncompany_fk" pk-table-ref="TAB272" pkCardinality="2" updateRule="0" >
+    <column-mapping id="CMP343" populated="true" fk-column-ref="COL283" name="Column Mapping" physicalName="Column Mapping" pk-column-ref="COL274" />
+   </relationship>
+   <reference ref-id="REL313" />
+   <reference ref-id="REL342" />
+  </relationships>
+ </target-database>
+ <ddl-generator type="ca.sqlpower.architect.ddl.MySqlDDLGenerator" allow-connection="true" target-catalog="dwh002" target-schema=""> </ddl-generator>
+ <create-kettle-job-settings filePath="" jobName="" schemaName="" kettleJoinType="0" savingToFile="true" />
+ <play-pen zoom="0.723763310015698" viewportX="0" viewportY="0" relationship-style="rectilinear">
+  <table-pane table-ref="TAB1" x="1097" y="828" />
+  <table-pane table-ref="TAB11" x="614" y="430" />
+  <table-pane table-ref="TAB25" x="887" y="661" />
+  <table-pane table-ref="TAB39" x="30" y="111" />
+  <table-pane table-ref="TAB48" x="26" y="201" />
+  <table-pane table-ref="TAB59" x="958" y="103" />
+  <table-pane table-ref="TAB68" x="801" y="272" />
+  <table-pane table-ref="TAB80" x="173" y="360" />
+  <table-pane table-ref="TAB89" x="54" y="466" />
+  <table-pane table-ref="TAB98" x="278" y="461" />
+  <table-pane table-ref="TAB108" x="1197" y="640" />
+  <table-pane table-ref="TAB117" x="976" y="555" />
+  <table-pane table-ref="TAB127" x="167" y="772" />
+  <table-pane table-ref="TAB143" x="478" y="713" />
+  <table-pane table-ref="TAB153" x="1284" y="396" />
+  <table-pane table-ref="TAB162" x="964" y="462" />
+  <table-pane table-ref="TAB174" x="519" y="111" />
+  <table-pane table-ref="TAB189" x="1231" y="520" />
+  <table-pane table-ref="TAB198" x="102" y="569" />
+  <table-pane table-ref="TAB212" x="661" y="729" />
+  <table-pane table-ref="TAB224" x="624" y="869" />
+  <table-pane table-ref="TAB233" x="415" y="291" />
+  <table-pane table-ref="TAB242" x="716" y="0" />
+  <table-pane table-ref="TAB251" x="232" y="119" />
+  <table-pane table-ref="TAB263" x="355" y="628" />
+  <table-pane table-ref="TAB272" x="1077" y="226" />
+  <table-pane table-ref="TAB281" x="910" y="377" />
+  <table-link relationship-ref="REL313" pk-x="184" pk-y="50" fk-x="0" fk-y="53" orientation="33" />
+  <table-link relationship-ref="REL342" pk-x="83" pk-y="63" fk-x="143" fk-y="0" orientation="132" />
+  <table-link relationship-ref="REL319" pk-x="120" pk-y="0" fk-x="0" fk-y="133" orientation="40" />
+  <table-link relationship-ref="REL307" pk-x="0" pk-y="108" fk-x="162" fk-y="30" orientation="18" />
+  <table-link relationship-ref="REL323" pk-x="94" pk-y="63" fk-x="58" fk-y="0" orientation="132" />
+  <table-link relationship-ref="REL338" pk-x="54" pk-y="63" fk-x="130" fk-y="0" orientation="132" />
+  <table-link relationship-ref="REL333" pk-x="0" pk-y="10" fk-x="158" fk-y="68" orientation="18" />
+  <table-link relationship-ref="REL329" pk-x="198" pk-y="69" fk-x="0" fk-y="47" orientation="33" />
+  <table-link relationship-ref="REL301" pk-x="72" pk-y="143" fk-x="84" fk-y="0" orientation="132" />
+  <table-link relationship-ref="REL299" pk-x="184" pk-y="126" fk-x="0" fk-y="14" orientation="33" />
+  <table-link relationship-ref="REL327" pk-x="0" pk-y="17" fk-x="171" fk-y="45" orientation="18" />
+  <table-link relationship-ref="REL325" pk-x="168" pk-y="31" fk-x="0" fk-y="36" orientation="33" />
+  <table-link relationship-ref="REL297" pk-x="0" pk-y="77" fk-x="168" fk-y="46" orientation="18" />
+  <table-link relationship-ref="REL315" pk-x="204" pk-y="27" fk-x="0" fk-y="31" orientation="33" />
+  <table-link relationship-ref="REL293" pk-x="184" pk-y="143" fk-x="18" fk-y="0" orientation="132" />
+  <table-link relationship-ref="REL291" pk-x="10" pk-y="0" fk-x="193" fk-y="95" orientation="24" />
+  <table-link relationship-ref="REL321" pk-x="62" pk-y="63" fk-x="119" fk-y="0" orientation="132" />
+  <table-link relationship-ref="REL295" pk-x="155" pk-y="0" fk-x="44" fk-y="79" orientation="72" />
+  <table-link relationship-ref="REL331" pk-x="0" pk-y="53" fk-x="158" fk-y="17" orientation="18" />
+  <table-link relationship-ref="REL303" pk-x="184" pk-y="78" fk-x="0" fk-y="52" orientation="33" />
+  <table-link relationship-ref="REL305" pk-x="104" pk-y="0" fk-x="123" fk-y="143" orientation="72" />
+  <table-link relationship-ref="REL309" pk-x="108" pk-y="143" fk-x="69" fk-y="0" orientation="132" />
+  <table-link relationship-ref="REL311" pk-x="141" pk-y="143" fk-x="102" fk-y="0" orientation="132" />
+  <table-link relationship-ref="REL340" pk-x="120" pk-y="0" fk-x="83" fk-y="79" orientation="72" />
+  <table-link relationship-ref="REL317" pk-x="131" pk-y="63" fk-x="30" fk-y="0" orientation="132" />
+  <table-link relationship-ref="REL335" pk-x="0" pk-y="76" fk-x="180" fk-y="42" orientation="18" />
+ </play-pen>
+ <profiles topNCount="10">
+  </profiles>
+</architect-project>
