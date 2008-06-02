@@ -106,7 +106,7 @@ CREATE TABLE &quot;${Internal.Transformation.Name}&quot; (
   first_name       varchar(64)       NOT NULL DEFAULT &apos;&apos;,
   last_name        varchar(64)       NOT NULL DEFAULT &apos;&apos;,
   extra            varchar(64)       NOT NULL DEFAULT &apos;&apos;,
-  character_name   varchar(64)       NOT NULL DEFAULT &apos;&apos;,
+  character_name   varchar(128)      NOT NULL DEFAULT &apos;&apos;,
   credits_position smallint unsigned NOT NULL DEFAULT 0,
   primary key(movie_id, first_name, last_name, character_name)
 )
