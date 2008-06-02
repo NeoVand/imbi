@@ -8,3 +8,4 @@ The IMBI source code repository contains all kettle transformations, sql scripts
 = Folder structure =
 
 * kettle - put all your kettle transformations and jobs here
+** lists - here we put all transformations and jobs that are directly concerned by transforming a 
