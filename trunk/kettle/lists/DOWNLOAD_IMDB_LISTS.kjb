@@ -23,6 +23,7 @@
       <name>START</name>
       <description>Special entries</description>
       <type>SPECIAL</type>
+      <launch_in_parallel>Special entries</launch_in_parallel>
       <start>Y</start>
       <dummy>N</dummy>
       <repeat>N</repeat>
@@ -40,9 +41,11 @@
       <yloc>109</yloc>
       </entry>
     <entry>
-      <name>Get a file with FTP 1</name>
+      <name>Download IMDB text files</name>
       <description>Get a file with FTP</description>
       <type>FTP</type>
+      <launch_in_parallel>Get a file with FTP</launch_in_parallel>
+      <port>21</port>
       <servername>ftp.fu-berlin.de</servername>
       <username/>
       <password>Encrypted </password>
@@ -55,112 +58,48 @@
       <only_new>N</only_new>
       <active>Y</active>
       <control_encoding>ISO-8859-1</control_encoding>
+      <movefiles>N</movefiles>
+      <movetodirectory/>
+      <adddate>N</adddate>
+      <addtime>N</addtime>
+      <SpecifyFormat>N</SpecifyFormat>
+      <date_time_format/>
+      <AddDateBeforeExtension>N</AddDateBeforeExtension>
+      <isaddresult>Y</isaddresult>
+      <createmovefolder>N</createmovefolder>
+      <proxy_host/>
+      <proxy_port/>
+      <proxy_username/>
+      <proxy_password/>
+      <ifFileExists>ifFileExistsSkip</ifFileExists>
+      <nr_limit>10</nr_limit>
+      <success_condition>success_if_no_errors</success_condition>
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
       <xloc>147</xloc>
       <yloc>109</yloc>
       </entry>
-    <entry>
-      <name>Send Failure Message</name>
-      <description>Mail</description>
-      <type>MAIL</type>
-      <server/>
-      <port/>
-      <destination/>
-      <destinationCc/>
-      <destinationBCc/>
-      <replyto/>
-      <subject>Download IMDB Files Failed</subject>
-      <include_date>Y</include_date>
-      <contact_person/>
-      <contact_phone/>
-      <comment>Downloading the imdb files failed.</comment>
-      <include_files>N</include_files>
-      <zip_files>N</zip_files>
-      <zip_name/>
-      <use_auth>N</use_auth>
-      <use_secure_auth>N</use_secure_auth>
-      <auth_user/>
-      <auth_password>Encrypted </auth_password>
-      <only_comment>N</only_comment>
-      <use_HTML>N</use_HTML>
-      <use_Priority>N</use_Priority>
-      <encoding>UTF-8</encoding>
-      <priority>normal</priority>
-      <importance>normal</importance>
-      <secureconnectiontype>SSL</secureconnectiontype>
-      <filetypes>      </filetypes>      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>149</xloc>
-      <yloc>209</yloc>
-      </entry>
-    <entry>
-      <name>Send Success Message</name>
-      <description>Mail</description>
-      <type>MAIL</type>
-      <server/>
-      <port/>
-      <destination/>
-      <destinationCc/>
-      <destinationBCc/>
-      <replyto/>
-      <subject/>
-      <include_date>N</include_date>
-      <contact_person/>
-      <contact_phone/>
-      <comment/>
-      <include_files>N</include_files>
-      <zip_files>N</zip_files>
-      <zip_name/>
-      <use_auth>N</use_auth>
-      <use_secure_auth>N</use_secure_auth>
-      <auth_user/>
-      <auth_password>Encrypted </auth_password>
-      <only_comment>N</only_comment>
-      <use_HTML>N</use_HTML>
-      <use_Priority>N</use_Priority>
-      <encoding>UTF-8</encoding>
-      <priority>normal</priority>
-      <importance>normal</importance>
-      <secureconnectiontype>SSL</secureconnectiontype>
-      <filetypes>      </filetypes>      <parallel>N</parallel>
-      <draw>Y</draw>
-      <nr>0</nr>
-      <xloc>271</xloc>
-      <yloc>106</yloc>
-      </entry>
   </entries>
   <hops>
     <hop>
       <from>START</from>
-      <to>Get a file with FTP 1</to>
+      <to>Download IMDB text files</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
       <evaluation>Y</evaluation>
       <unconditional>Y</unconditional>
     </hop>
-    <hop>
-      <from>Get a file with FTP 1</from>
-      <to>Send Failure Message</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>N</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
-    <hop>
-      <from>Get a file with FTP 1</from>
-      <to>Send Success Message</to>
-      <from_nr>0</from_nr>
-      <to_nr>0</to_nr>
-      <enabled>Y</enabled>
-      <evaluation>Y</evaluation>
-      <unconditional>N</unconditional>
-    </hop>
   </hops>
   <notepads>
+    <notepad>
+      <note>This job downloads all IMDB text files.
+Files are put in the &quot;input&quot; directory</note>
+      <xloc>26</xloc>
+      <yloc>36</yloc>
+      <width>190</width>
+      <heigth>36</heigth>
+    </notepad>
   </notepads>
 </job>
