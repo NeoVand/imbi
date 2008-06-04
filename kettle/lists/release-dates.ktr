@@ -15,6 +15,7 @@
       <rejected/>
       <connection/>
       <table/>
+      <step_performance_table/>
       <use_batchid>Y</use_batchid>
       <use_logfield>N</use_logfield>
     </log>
@@ -33,6 +34,8 @@
     <feedback_size>50000</feedback_size>
     <using_thread_priorities>N</using_thread_priorities>
     <shared_objects_file/>
+    <capture_step_performance>N</capture_step_performance>
+    <step_performance_capturing_delay>1000</step_performance_capturing_delay>
     <dependencies>
     </dependencies>
     <partitionschemas>
@@ -59,7 +62,7 @@
     <type>MYSQL</type>
     <access>Native</access>
     <database>imbi_lists</database>
-    <port>3351</port>
+    <port>3306</port>
     <username>root</username>
     <password>Encrypted </password>
     <servername/>
@@ -70,12 +73,8 @@
       <attribute><code>EXTRA_OPTION_MYSQL.useCursorFetch</code><attribute>true</attribute></attribute>
       <attribute><code>FORCE_IDENTIFIERS_TO_LOWERCASE</code><attribute>N</attribute></attribute>
       <attribute><code>FORCE_IDENTIFIERS_TO_UPPERCASE</code><attribute>N</attribute></attribute>
-      <attribute><code>INITIAL_POOL_SIZE</code><attribute>5</attribute></attribute>
       <attribute><code>IS_CLUSTERED</code><attribute>N</attribute></attribute>
-      <attribute><code>MAXIMUM_POOL_SIZE</code><attribute>10</attribute></attribute>
-      <attribute><code>MSSQL_DOUBLE_DECIMAL_SEPARATOR</code><attribute>N</attribute></attribute>
-      <attribute><code>PORT_NUMBER</code><attribute>3351</attribute></attribute>
-      <attribute><code>QUOTE_ALL_FIELDS</code><attribute>N</attribute></attribute>
+      <attribute><code>PORT_NUMBER</code><attribute>3306</attribute></attribute>
       <attribute><code>STREAM_RESULTS</code><attribute>Y</attribute></attribute>
       <attribute><code>USE_POOLING</code><attribute>N</attribute></attribute>
     </attributes>
@@ -228,16 +227,20 @@ DEFAULT COLLATE=latin1_general_cs
     <file>
       <name>${Internal.Transformation.Filename.Directory}${file.separator}..${file.separator}..${file.separator}excluded${file.separator}${Internal.Transformation.Name}</name>
       <is_command>N</is_command>
+      <do_not_open_new_file_init>N</do_not_open_new_file_init>
       <extention>txt</extention>
       <append>N</append>
       <split>N</split>
       <haspartno>N</haspartno>
       <add_date>N</add_date>
       <add_time>N</add_time>
+      <SpecifyFormat>N</SpecifyFormat>
+      <date_time_format/>
+      <add_to_result_filenames>Y</add_to_result_filenames>
       <pad>N</pad>
       <fast_dump>N</fast_dump>
       <splitevery>0</splitevery>
-      </file>
+    </file>
     <fields>
       <field>
         <name>line_text</name>
@@ -247,9 +250,10 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
+      </field>
       <field>
         <name>line_number</name>
         <type>Integer</type>
@@ -258,9 +262,10 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
+      </field>
       <field>
         <name>status</name>
         <type>Integer</type>
@@ -269,9 +274,10 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
+      </field>
       <field>
         <name>have_match</name>
         <type>String</type>
@@ -280,9 +286,10 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
+      </field>
       <field>
         <name>movie_id</name>
         <type>String</type>
@@ -291,9 +298,10 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
+      </field>
       <field>
         <name>country_name</name>
         <type>String</type>
@@ -302,10 +310,11 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
-      </fields>
+      </field>
+    </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>394</xloc>
@@ -348,6 +357,7 @@ DEFAULT COLLATE=latin1_general_cs
     <rownum_field>line_number</rownum_field>
     <format>mixed</format>
     <encoding>ISO-8859-1</encoding>
+    <add_to_result_filenames>Y</add_to_result_filenames>
     <file>
       <name>${Internal.Transformation.Filename.Directory}${file.separator}..${file.separator}..${file.separator}input${file.separator}${Internal.Transformation.Name}.list.gz</name>
       <filemask/>
@@ -418,16 +428,20 @@ DEFAULT COLLATE=latin1_general_cs
     <file>
       <name>${Internal.Transformation.Filename.Directory}${file.separator}..${file.separator}..${file.separator}rejected${file.separator}${Internal.Transformation.Name}</name>
       <is_command>N</is_command>
+      <do_not_open_new_file_init>N</do_not_open_new_file_init>
       <extention>txt</extention>
       <append>N</append>
       <split>N</split>
       <haspartno>N</haspartno>
       <add_date>N</add_date>
       <add_time>N</add_time>
+      <SpecifyFormat>N</SpecifyFormat>
+      <date_time_format/>
+      <add_to_result_filenames>Y</add_to_result_filenames>
       <pad>N</pad>
       <fast_dump>N</fast_dump>
       <splitevery>0</splitevery>
-      </file>
+    </file>
     <fields>
       <field>
         <name>line_text</name>
@@ -437,9 +451,10 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>255</length>
         <precision>-1</precision>
-        </field>
+      </field>
       <field>
         <name>line_number</name>
         <type>Integer</type>
@@ -448,9 +463,10 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>10</length>
         <precision>0</precision>
-        </field>
+      </field>
       <field>
         <name>movie_id</name>
         <type>String</type>
@@ -459,9 +475,10 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
+      </field>
       <field>
         <name>country_name</name>
         <type>String</type>
@@ -470,9 +487,10 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
+      </field>
       <field>
         <name>day_number</name>
         <type>String</type>
@@ -481,9 +499,10 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
+      </field>
       <field>
         <name>month_number</name>
         <type>String</type>
@@ -492,9 +511,10 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
+      </field>
       <field>
         <name>year</name>
         <type>String</type>
@@ -503,9 +523,10 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
+      </field>
       <field>
         <name>region_name</name>
         <type>String</type>
@@ -514,9 +535,10 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
+      </field>
       <field>
         <name>error_description</name>
         <type>String</type>
@@ -525,9 +547,10 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
+      </field>
       <field>
         <name>error_fields</name>
         <type>String</type>
@@ -536,9 +559,10 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
+      </field>
       <field>
         <name>error_code</name>
         <type>String</type>
@@ -547,10 +571,11 @@ DEFAULT COLLATE=latin1_general_cs
         <decimal/>
         <group/>
         <nullif/>
+        <trim_type>none</trim_type>
         <length>-1</length>
         <precision>-1</precision>
-        </field>
-      </fields>
+      </field>
+    </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>601</xloc>
