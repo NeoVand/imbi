@@ -1,0 +1,2 @@
+CREATE SCHEMA imbi_lists
+DEFAULT CHARSET latin1;
