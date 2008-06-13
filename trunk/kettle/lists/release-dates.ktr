@@ -81,7 +81,7 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>CREATE TABLE</from><to>input-list</to><enabled>Y</enabled> </hop>  <hop> <from>input-list</from><to>transform</to><enabled>Y</enabled> </hop>  <hop> <from>table-output</from><to>rejected</to><enabled>Y</enabled> </hop>  <hop> <from>Select values</from><to>table-output</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>Select values</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>excluded</to><enabled>Y</enabled> </hop>  <hop> <from>transform</from><to>Value Mapper</to><enabled>Y</enabled> </hop>  <hop> <from>Value Mapper</from><to>Filter matched rows</to><enabled>Y</enabled> </hop>  </order>
+  <hop> <from>CREATE TABLE</from><to>input-list</to><enabled>Y</enabled> </hop>  <hop> <from>table-output</from><to>rejected</to><enabled>Y</enabled> </hop>  <hop> <from>Select values</from><to>table-output</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>excluded</to><enabled>Y</enabled> </hop>  <hop> <from>input-list</from><to>Regex Evaluation</to><enabled>Y</enabled> </hop>  <hop> <from>Regex Evaluation</from><to>Filter matched rows</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>Map Month Names</to><enabled>Y</enabled> </hop>  <hop> <from>Map Month Names</from><to>Select values</to><enabled>Y</enabled> </hop>  </order>
   <step>
     <name>CREATE TABLE</name>
     <type>ExecSQL</type>
@@ -106,8 +106,8 @@ CREATE TABLE `${Internal.Transformation.Name}` (
   day_number   tinyint unsigned  NOT NULL DEFAULT 0,
   month_number tinyint unsigned  NOT NULL DEFAULT 0,
   year         smallint unsigned NOT NULL DEFAULT 0,
-  region_name  varchar(128)      NOT NULL DEFAULT &apos;&apos;,
-  primary key(movie_id,country_name,region_name,year,month_number,day_number)
+  region_name  varchar(128)      DEFAULT &apos;&apos;,
+  unique(movie_id,country_name,region_name,year,month_number,day_number)
 )
 ENGINE=MyISAM 
 DEFAULT CHARSET=latin1
@@ -137,7 +137,7 @@ DEFAULT COLLATE=latin1_general_cs
            <method>none</method>
            <schema_name/>
            </partitioning>
-<send_true_to>Select values</send_true_to>
+<send_true_to>Map Month Names</send_true_to>
 <send_false_to>excluded</send_false_to>
     <compare>
 <condition>
@@ -145,12 +145,12 @@ DEFAULT COLLATE=latin1_general_cs
  <leftvalue>have_match</leftvalue>
  <function>=</function>
  <rightvalue/>
- <value><name>constant</name><type>String</type><text>match</text><length>-1</length><precision>-1</precision><isnull>N</isnull></value> </condition>
+ <value><name>constant</name><type>Boolean</type><text>Y</text><length>-1</length><precision>-1</precision><isnull>N</isnull></value> </condition>
     </compare>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>394</xloc>
-      <yloc>81</yloc>
+      <xloc>345</xloc>
+      <yloc>79</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -200,8 +200,8 @@ DEFAULT COLLATE=latin1_general_cs
       </field>        <select_unspecified>N</select_unspecified>
     </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>494</xloc>
-      <yloc>81</yloc>
+      <xloc>554</xloc>
+      <yloc>79</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -252,36 +252,24 @@ DEFAULT COLLATE=latin1_general_cs
         <group/>
         <nullif/>
         <trim_type>none</trim_type>
-        <length>-1</length>
+        <length>255</length>
         <precision>-1</precision>
       </field>
       <field>
         <name>line_number</name>
         <type>Integer</type>
-        <format>0</format>
+        <format/>
         <currency/>
         <decimal/>
         <group/>
         <nullif/>
         <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>status</name>
-        <type>Integer</type>
-        <format>0</format>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
+        <length>10</length>
+        <precision>0</precision>
       </field>
       <field>
         <name>have_match</name>
-        <type>String</type>
+        <type>Boolean</type>
         <format/>
         <currency/>
         <decimal/>
@@ -315,11 +303,95 @@ DEFAULT COLLATE=latin1_general_cs
         <length>-1</length>
         <precision>-1</precision>
       </field>
+      <field>
+        <name>group3</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>group4</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>day_number</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>month_name</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>year</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>group8</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>region_name</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>394</xloc>
-      <yloc>173</yloc>
+      <xloc>344</xloc>
+      <yloc>183</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -328,7 +400,7 @@ DEFAULT COLLATE=latin1_general_cs
     <name>input-list</name>
     <type>TextFileInput</type>
     <description/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <copies>1</copies>
          <partitioning>
            <method>none</method>
@@ -579,8 +651,8 @@ DEFAULT COLLATE=latin1_general_cs
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>601</xloc>
-      <yloc>175</yloc>
+      <xloc>634</xloc>
+      <yloc>172</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -613,106 +685,14 @@ DEFAULT COLLATE=latin1_general_cs
     <return_field/>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>597</xloc>
-      <yloc>80</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>transform</name>
-    <type>ScriptValueMod</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <compatible>Y</compatible>
-    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
-        <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>&#47;&#47; Please use these lines in all the &quot;list&quot; transformations
-var status= 0;                               &#47;&#47;assign a numerical constant each time you match a regex. for debugging.
-var have_match= &apos;match&apos;;                     &#47;&#47;set this to &quot;no match&quot; if your script cannot parse the current row.
-var line_text_string= line_text.getString(); &#47;&#47;this is the line of text extracted from the list. Please output this as a field
-
-&#47;&#47;put the specific script below:
-var movie_id = &apos;&apos;;
-var country_name = &apos;&apos;; 
-var day_number = &apos;&apos;;
-var month_number = &apos;&apos;;
-var year = &apos;&apos;;
-var region_name = &apos;&apos;;
-
-if(
-  line_text_string.match(
-    &#47;^([^\t]+)\t+(.+):((([0-9]{1,2}) +)?([A-Za-z]+),? *)?([0-9]{4})(\t+\((.+)\))?$&#47;i
-&#47;&#47;   1          2    345               6                7         8     9
-  )
-){
-  status= 1;
-  movie_id = RegExp.$1; &#47;&#47;movie_id
-  country_name = RegExp.$2; &#47;&#47;country_name
-  day_number = (RegExp.$5==&apos;&apos;?0:RegExp.$5);
-  month_name = RegExp.$6;
-  year = RegExp.$7; &#47;&#47;year
-  region_name = RegExp.$9; &#47;&#47;region_name
-} else {
-  &#47;&#47;TODO:discard this row
-  have_match= &apos;no match&apos;;
-}
-</jsScript_script>
-      </jsScript>    </jsScripts>    <fields>      <field>        <name>status</name>
-        <rename>status</rename>
-        <type>Number</type>
-        <length>16</length>
-        <precision>2</precision>
-      </field>      <field>        <name>have_match</name>
-        <rename>have_match</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>movie_id</name>
-        <rename>movie_id</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>country_name</name>
-        <rename>country_name</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>day_number</name>
-        <rename>day_number</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>month_name</name>
-        <rename>month_name</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>year</name>
-        <rename>year</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>region_name</name>
-        <rename>region_name</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>    </fields>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>208</xloc>
+      <xloc>630</xloc>
       <yloc>77</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Value Mapper</name>
+    <name>Map Month Names</name>
     <type>ValueMapper</type>
     <description/>
     <distribute>Y</distribute>
@@ -776,8 +756,148 @@ if(
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>283</xloc>
+      <xloc>457</xloc>
       <yloc>79</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Regex Evaluation</name>
+    <type>RegexEval</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <script>^([^\t]+)\t+(.+):((([0-9]{1,2}) +)?([A-Za-z]+),? *)?([0-9]{4})(\t+\((.+)\))?$</script>
+    <matcher>line_text</matcher>
+    <resultfieldname>have_match</resultfieldname>
+    <usevar>N</usevar>
+    <allowcapturegroups>Y</allowcapturegroups>
+    <canoneq>N</canoneq>
+    <caseinsensitive>N</caseinsensitive>
+    <comment>N</comment>
+    <dotall>N</dotall>
+    <multiline>N</multiline>
+    <unicode>N</unicode>
+    <unix>N</unix>
+    <fields>
+      <field>
+        <name>movie_id</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>country_name</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>group3</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>group4</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>day_number</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>month_name</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>year</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>group8</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>region_name</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>232</xloc>
+      <yloc>80</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
