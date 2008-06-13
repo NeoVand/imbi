@@ -95,10 +95,10 @@
     <connection>imbi_lists</connection>
     <execute_each_row>N</execute_each_row>
     <replace_variables>Y</replace_variables>
-    <sql>DROP TABLE IF EXISTS &quot;${Internal.Transformation.Name}&quot;
+    <sql>DROP TABLE IF EXISTS `${Internal.Transformation.Name}`
 ;
 
-CREATE TABLE &quot;${Internal.Transformation.Name}&quot; (
+CREATE TABLE `${Internal.Transformation.Name}` (
   line_text    varchar(255)      NOT NULL DEFAULT &apos;&apos;,
   line_number  int unsigned      NOT NULL DEFAULT 0,
   movie_id     varchar(255)      NOT NULL DEFAULT 0,
