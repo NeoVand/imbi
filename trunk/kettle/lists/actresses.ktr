@@ -50,10 +50,10 @@
   </info>
   <notepads>
     <notepad>
-      <note>The actors that play a role in the film</note>
+      <note>The actresses that play a role in the film</note>
       <xloc>58</xloc>
       <yloc>26</yloc>
-      <width>187</width>
+      <width>203</width>
       <heigth>23</heigth>
     </notepad>
   </notepads>
@@ -81,7 +81,7 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>CREATE TABLE</from><to>input-list</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>excluded</to><enabled>Y</enabled> </hop>  <hop> <from>Select values</from><to>table-output</to><enabled>Y</enabled> </hop>  <hop> <from>input-list</from><to>transform</to><enabled>Y</enabled> </hop>  <hop> <from>transform</from><to>Filter matched rows</to><enabled>Y</enabled> </hop>  <hop> <from>table-output</from><to>rejected</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>Select values</to><enabled>Y</enabled> </hop>  </order>
+  <hop> <from>CREATE TABLE</from><to>input-list</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>Select values</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows</from><to>excluded</to><enabled>Y</enabled> </hop>  <hop> <from>Select values</from><to>table-output</to><enabled>Y</enabled> </hop>  <hop> <from>input-list</from><to>Regex Evaluation</to><enabled>Y</enabled> </hop>  <hop> <from>table-output</from><to>rejected</to><enabled>Y</enabled> </hop>  <hop> <from>Regex Evaluation</from><to>Java Script</to><enabled>Y</enabled> </hop>  <hop> <from>Java Script</from><to>Filter matched rows</to><enabled>Y</enabled> </hop>  </order>
   <step>
     <name>CREATE TABLE</name>
     <type>ExecSQL</type>
@@ -102,12 +102,12 @@ CREATE TABLE `${Internal.Transformation.Name}` (
   line_text        varchar(255)      NOT NULL DEFAULT &apos;&apos;,
   line_number      int unsigned      NOT NULL DEFAULT 0,
   movie_id         varchar(255)      NOT NULL DEFAULT 0,
-  first_name       varchar(64)       NOT NULL DEFAULT &apos;&apos;,
+  first_name       varchar(64)       DEFAULT &apos;&apos;,
   last_name        varchar(64)       NOT NULL DEFAULT &apos;&apos;,
-  extra            varchar(64)       NOT NULL DEFAULT &apos;&apos;,
-  character_name   varchar(128)      NOT NULL DEFAULT &apos;&apos;,
-  credits_position smallint unsigned NOT NULL DEFAULT 0,
-  primary key(movie_id, first_name, last_name, character_name)
+  extra            varchar(64)       DEFAULT &apos;&apos;,
+  character_name   varchar(128)      DEFAULT &apos;&apos;,
+  credits_position smallint unsigned  DEFAULT 0,
+  unique(movie_id, first_name, last_name, character_name)
 )
 ENGINE=MyISAM 
 DEFAULT CHARSET=latin1
@@ -121,8 +121,8 @@ DEFAULT COLLATE=latin1_general_cs
     </arguments>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>63</xloc>
-      <yloc>82</yloc>
+      <xloc>59</xloc>
+      <yloc>101</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -138,19 +138,195 @@ DEFAULT COLLATE=latin1_general_cs
            <schema_name/>
            </partitioning>
 <send_true_to>Select values</send_true_to>
-<send_false_to>Select values</send_false_to>
+<send_false_to>excluded</send_false_to>
     <compare>
 <condition>
  <negated>N</negated>
  <leftvalue>have_match</leftvalue>
  <function>=</function>
  <rightvalue/>
- <value><name>constant</name><type>String</type><text>match</text><length>-1</length><precision>-1</precision><isnull>N</isnull></value> </condition>
+ <value><name>constant</name><type>Boolean</type><text>Y</text><length>-1</length><precision>-1</precision><isnull>N</isnull></value> </condition>
     </compare>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>405</xloc>
-      <yloc>84</yloc>
+      <xloc>435</xloc>
+      <yloc>102</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Regex Evaluation</name>
+    <type>RegexEval</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <script>^(([^,]+)(, ([^\t]+))?)?\t+([^ ]+( [^ ]+)*)(  \((.+)\))?(  \[(.+)\])?(  &lt;([0-9]+)&gt;)?$</script>
+    <matcher>line_text</matcher>
+    <resultfieldname>have_match</resultfieldname>
+    <usevar>N</usevar>
+    <allowcapturegroups>Y</allowcapturegroups>
+    <canoneq>N</canoneq>
+    <caseinsensitive>N</caseinsensitive>
+    <comment>N</comment>
+    <dotall>N</dotall>
+    <multiline>N</multiline>
+    <unicode>N</unicode>
+    <unix>N</unix>
+    <fields>
+      <field>
+        <name>group1</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>last_name</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>group3</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>first_name</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>movie_id</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>group6</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>group7</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>extra</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>group8</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>character_name</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>group11</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+      <field>
+        <name>credits_position</name>
+        <type>-</type>
+        <format/>
+        <group/>
+        <decimal/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <nullif/>
+        <ifnull/>
+        <trimtype>none</trimtype>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>250</xloc>
+      <yloc>100</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -173,12 +349,12 @@ DEFAULT COLLATE=latin1_general_cs
         <rename/>
         <length>-2</length>
         <precision>-2</precision>
-      </field>      <field>        <name>last_name</name>
-        <rename/>
+      </field>      <field>        <name>real_last_name</name>
+        <rename>last_name</rename>
         <length>-2</length>
         <precision>-2</precision>
-      </field>      <field>        <name>first_name</name>
-        <rename/>
+      </field>      <field>        <name>real_first_name</name>
+        <rename>first_name</rename>
         <length>-2</length>
         <precision>-2</precision>
       </field>      <field>        <name>movie_id</name>
@@ -200,8 +376,8 @@ DEFAULT COLLATE=latin1_general_cs
       </field>        <select_unspecified>N</select_unspecified>
     </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>646</xloc>
-      <yloc>83</yloc>
+      <xloc>543</xloc>
+      <yloc>103</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -252,35 +428,35 @@ DEFAULT COLLATE=latin1_general_cs
         <group/>
         <nullif/>
         <trim_type>none</trim_type>
-        <length>-1</length>
+        <length>255</length>
         <precision>-1</precision>
       </field>
       <field>
         <name>line_number</name>
         <type>Integer</type>
-        <format>0</format>
+        <format/>
         <currency/>
         <decimal/>
         <group/>
         <nullif/>
         <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>status</name>
-        <type>Integer</type>
-        <format>0</format>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
+        <length>10</length>
+        <precision>0</precision>
       </field>
       <field>
         <name>have_match</name>
+        <type>Boolean</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>group1</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -292,7 +468,7 @@ DEFAULT COLLATE=latin1_general_cs
         <precision>-1</precision>
       </field>
       <field>
-        <name>line_text_string</name>
+        <name>last_name</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -304,7 +480,19 @@ DEFAULT COLLATE=latin1_general_cs
         <precision>-1</precision>
       </field>
       <field>
-        <name>name</name>
+        <name>group3</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>first_name</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -328,6 +516,30 @@ DEFAULT COLLATE=latin1_general_cs
         <precision>-1</precision>
       </field>
       <field>
+        <name>group6</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>group7</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
         <name>extra</name>
         <type>String</type>
         <format/>
@@ -340,7 +552,31 @@ DEFAULT COLLATE=latin1_general_cs
         <precision>-1</precision>
       </field>
       <field>
+        <name>group8</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
         <name>character_name</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>group11</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -366,8 +602,8 @@ DEFAULT COLLATE=latin1_general_cs
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>405</xloc>
-      <yloc>176</yloc>
+      <xloc>435</xloc>
+      <yloc>187</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -376,7 +612,7 @@ DEFAULT COLLATE=latin1_general_cs
     <name>input-list</name>
     <type>TextFileInput</type>
     <description/>
-    <distribute>Y</distribute>
+    <distribute>N</distribute>
     <copies>1</copies>
          <partitioning>
            <method>none</method>
@@ -449,8 +685,8 @@ DEFAULT COLLATE=latin1_general_cs
     <date_format_locale>en_us</date_format_locale>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>176</xloc>
-      <yloc>84</yloc>
+      <xloc>160</xloc>
+      <yloc>99</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -501,20 +737,20 @@ DEFAULT COLLATE=latin1_general_cs
         <group/>
         <nullif/>
         <trim_type>none</trim_type>
-        <length>-1</length>
+        <length>255</length>
         <precision>-1</precision>
       </field>
       <field>
         <name>line_number</name>
         <type>Integer</type>
-        <format>0</format>
+        <format/>
         <currency/>
         <decimal/>
         <group/>
         <nullif/>
         <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
+        <length>10</length>
+        <precision>0</precision>
       </field>
       <field>
         <name>last_name</name>
@@ -588,47 +824,11 @@ DEFAULT COLLATE=latin1_general_cs
         <length>-1</length>
         <precision>-1</precision>
       </field>
-      <field>
-        <name>error_descriptions</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>error_fields</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
-      <field>
-        <name>error_codes</name>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <nullif/>
-        <trim_type>none</trim_type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>750</xloc>
-      <yloc>175</yloc>
+      <xloc>634</xloc>
+      <yloc>187</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -661,14 +861,14 @@ DEFAULT COLLATE=latin1_general_cs
     <return_field/>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>751</xloc>
-      <yloc>80</yloc>
+      <xloc>635</xloc>
+      <yloc>104</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>transform</name>
+    <name>Java Script</name>
     <type>ScriptValueMod</type>
     <description/>
     <distribute>Y</distribute>
@@ -680,95 +880,39 @@ DEFAULT COLLATE=latin1_general_cs
     <compatible>Y</compatible>
     <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
         <jsScript_name>Script 1</jsScript_name>
-        <jsScript_script>&#47;&#47; Please use these lines in all the &quot;list&quot; transformations
-var status= 0;                               &#47;&#47;assign a numerical constant each time you match a regex. for debugging.
-var have_match= &apos;match&apos;;                     &#47;&#47;set this to &quot;no match&quot; if your script cannot parse the current row.
-var line_text_string= line_text.getString(); &#47;&#47;this is the line of text extracted from the list. Please output this as a field
+        <jsScript_script>&#47;&#47;Script here
+var first_row;
+var real_last_name;
+var real_first_name;
 
-&#47;&#47;put the specific script below:
-var name;
-var movie_id = &apos;&apos;;
-var extra = &apos;&apos;;
-
-var character_name = &apos;&apos;; 
-var credits_position = &apos;&apos;; 
-var first_name= &apos;&apos;;
-var last_name= &apos;&apos;;
-
-if(
-  line_text_string.match(
-    &#47;^([^\t]+)?\t+([^ ]+( [^ ]+)*)(  \((.+)\))?(  \[(.+)\])?(  &lt;([0-9]+)&gt;)?$&#47;i
-&#47;&#47;    1     \1    2     3     \3\24    5       6    7       8   9
-&#47;&#47;    &#47;^([^\t]+)?\t+([^ ]+( [^ ]+)*)(  .+)?$&#47;i
-  )
-){
-  status= 1;
-  name = (RegExp.$1==&apos;&apos;?name:RegExp.$1);
-  movie_id = RegExp.$2; &#47;&#47;movie_id
-  extra = RegExp.$5; 
-  character_name = RegExp.$7;
-  credits_position = RegExp.$9==&apos;&apos;?0:RegExp.$9;
-  if(
-    name.match(
-      &#47;^([^,]+)(, (.+))$&#47;
-&#47;&#47;      1   \1 2  3 \3\2
-    )
-  ){
-    last_name= RegExp.$1;
-    first_name= RegExp.$3;
-  } else {
-    last_name= name;
-    first_name= &apos;&apos;;
-  }
+if(last_name.getString()==null){
+    &#47;&#47;last name is null - this means this line is the 2nd or beyond line 
+    &#47;&#47;of a set of lines for one actress. 
+    &#47;&#47;In this case, we grab the values from the first line of the set
+    real_last_name  = first_row.getString(&quot;last_name&quot;, &quot;-&quot;);
+    real_first_name = first_row.getString(&quot;first_name&quot;, &quot;-&quot;);
 } else {
-  &#47;&#47;TODO:discard this row
-  have_match= &apos;no match&apos;;
+    &#47;&#47;the last name is not null. this is the first line of a set of
+    &#47;&#47;lines for the movies of one actress
+    first_row = row;
+    real_last_name  = last_name.getString();
+    real_first_name = first_name.getString();
 }
 </jsScript_script>
-      </jsScript>    </jsScripts>    <fields>      <field>        <name>status</name>
-        <rename>status</rename>
-        <type>Number</type>
-        <length>16</length>
-        <precision>2</precision>
-      </field>      <field>        <name>have_match</name>
-        <rename>have_match</rename>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>real_last_name</name>
+        <rename>real_last_name</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
-      </field>      <field>        <name>movie_id</name>
-        <rename>movie_id</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>extra</name>
-        <rename>extra</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>character_name</name>
-        <rename>character_name</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>credits_position</name>
-        <rename>credits_position</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>first_name</name>
-        <rename>first_name</rename>
-        <type>String</type>
-        <length>-1</length>
-        <precision>-1</precision>
-      </field>      <field>        <name>last_name</name>
-        <rename>last_name</rename>
+      </field>      <field>        <name>real_first_name</name>
+        <rename>real_first_name</rename>
         <type>String</type>
         <length>-1</length>
         <precision>-1</precision>
       </field>    </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>289</xloc>
-      <yloc>84</yloc>
+      <xloc>340</xloc>
+      <yloc>101</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
