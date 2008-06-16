@@ -40,12 +40,12 @@
       <yloc>103</yloc>
       </entry>
     <entry>
-      <name>Transformation 1</name>
+      <name>Load Actors</name>
       <description>Transformation</description>
       <type>TRANS</type>
       <launch_in_parallel>Transformation</launch_in_parallel>
-      <filename/>
-      <transname/>
+      <filename>${Internal.Job.Filename.Directory}${file.separator}actors.ktr</filename>
+      <transname>Load Actor Movies</transname>
       <directory>&#47;</directory>
       <arg_from_previous>N</arg_from_previous>
       <exec_per_row>N</exec_per_row>
@@ -63,15 +63,15 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>179</xloc>
+      <xloc>180</xloc>
       <yloc>103</yloc>
       </entry>
     <entry>
-      <name>Transformation 2</name>
+      <name>Load Actor Movies</name>
       <description>Transformation</description>
       <type>TRANS</type>
       <launch_in_parallel>Transformation</launch_in_parallel>
-      <filename/>
+      <filename>${Internal.Job.Filename.Directory}${file.separator}actor_movies.ktr</filename>
       <transname/>
       <directory>&#47;</directory>
       <arg_from_previous>N</arg_from_previous>
@@ -90,8 +90,8 @@
       <parallel>N</parallel>
       <draw>Y</draw>
       <nr>0</nr>
-      <xloc>282</xloc>
-      <yloc>104</yloc>
+      <xloc>283</xloc>
+      <yloc>103</yloc>
       </entry>
     <entry>
       <name>Success 1</name>
@@ -108,7 +108,7 @@
   <hops>
     <hop>
       <from>START</from>
-      <to>Transformation 1</to>
+      <to>Load Actors</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -116,8 +116,8 @@
       <unconditional>Y</unconditional>
     </hop>
     <hop>
-      <from>Transformation 1</from>
-      <to>Transformation 2</to>
+      <from>Load Actors</from>
+      <to>Load Actor Movies</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
       <enabled>Y</enabled>
@@ -125,7 +125,7 @@
       <unconditional>N</unconditional>
     </hop>
     <hop>
-      <from>Transformation 2</from>
+      <from>Load Actor Movies</from>
       <to>Success 1</to>
       <from_nr>0</from_nr>
       <to_nr>0</to_nr>
@@ -135,5 +135,12 @@
     </hop>
   </hops>
   <notepads>
+    <notepad>
+      <note>This Job ensures Actors and Actor movies transformations are run in the correct sequence</note>
+      <xloc>94</xloc>
+      <yloc>58</yloc>
+      <width>444</width>
+      <heigth>23</heigth>
+    </notepad>
   </notepads>
 </job>
