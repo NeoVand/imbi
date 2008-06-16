@@ -580,7 +580,7 @@ if(last_name.getString()==null){
     <name>input-list</name>
     <type>TextFileInput</type>
     <description/>
-    <distribute>N</distribute>
+    <distribute>Y</distribute>
     <copies>1</copies>
          <partitioning>
            <method>none</method>

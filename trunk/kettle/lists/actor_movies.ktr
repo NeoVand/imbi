@@ -1134,7 +1134,7 @@ WHERE  line_number &lt;= ?</sql>
            </partitioning>
     <connection>imbi_lists</connection>
     <schema/>
-    <table>actor_movies</table>
+    <table>${Internal.Transformation.Name}</table>
     <commit>1000</commit>
     <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
