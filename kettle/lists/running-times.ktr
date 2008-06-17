@@ -56,6 +56,31 @@
       <width>298</width>
       <heigth>23</heigth>
     </notepad>
+    <notepad>
+      <note>Duration is currently retrieved as a string. 
+We should try to parse it, but it&apos;s going 
+to be quite a feat. 
+
+Some patterns seen sofar:
+
+[0-9]+ (ex: 207)
+[0-9]+ minutes (ex: 60 minutes)
+[0-9]+ seconds (ex: 60 seconds)
+[0-9]+ mins [0-9]+sec (ex: 60 mins 20sec)
+[0-9]+\:[0-9]+\:[0-9]+ (ex: 10:33:39)
+[0-9]+\:[0-9]+ (ex: 2:07)
+[0-9]+\.[0-9]+ (ex: 2.07)
+[0-9]+\,[0-9]+ (ex: 2,07)
+[0-9]+\&apos;  (ex: 2&apos;)
+[0-9]+\&apos;[0-9]+\&apos;\&apos;  (ex: 2&apos;07&apos;&apos;)
+[0-9]+\&apos;[0-9]+\&quot;   (ex: 2&apos;07&quot;)
+[0-9]+ hours [0-9]+ (ex: 2 hours 20)
+[0-9]+ &#47; [0-9]+min (ex: 2 &#47; 89min)</note>
+      <xloc>72</xloc>
+      <yloc>165</yloc>
+      <width>217</width>
+      <heigth>257</heigth>
+    </notepad>
   </notepads>
   <connection>
     <name>imbi_lists</name>
