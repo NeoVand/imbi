@@ -49,10 +49,24 @@
   </info>
   <notepads>
     <notepad>
-      <note>The actors that play a role in the film</note>
-      <xloc>49</xloc>
-      <yloc>28</yloc>
-      <width>187</width>
+      <note>The actors that play a role in a movie</note>
+      <xloc>60</xloc>
+      <yloc>55</yloc>
+      <width>189</width>
+      <heigth>23</heigth>
+    </notepad>
+    <notepad>
+      <note>actor_movies</note>
+      <xloc>602</xloc>
+      <yloc>63</yloc>
+      <width>75</width>
+      <heigth>23</heigth>
+    </notepad>
+    <notepad>
+      <note>actors</note>
+      <xloc>606</xloc>
+      <yloc>202</yloc>
+      <width>40</width>
       <heigth>23</heigth>
     </notepad>
   </notepads>
@@ -73,7 +87,7 @@
     </attributes>
   </connection>
   <order>
-  <hop> <from>CREATE TABLE</from><to>input-list</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows 1</from><to>excluded</to><enabled>Y</enabled> </hop>  <hop> <from>Regex Evaluation</from><to>Filter matched rows 1</to><enabled>Y</enabled> </hop>  <hop> <from>Select Actor Movie values 1</from><to>table-output</to><enabled>Y</enabled> </hop>  <hop> <from>input-list</from><to>Regex Evaluation</to><enabled>Y</enabled> </hop>  <hop> <from>table-output</from><to>rejected</to><enabled>Y</enabled> </hop>  <hop> <from>Database join</from><to>Select Actor Movie values 1</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows 1</from><to>Dummy (do nothing)</to><enabled>Y</enabled> </hop>  <hop> <from>Dummy (do nothing)</from><to>Database join</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows 1 2</from><to>Dummy (do nothing) 2</to><enabled>Y</enabled> </hop>  <hop> <from>Regex Evaluation</from><to>Filter matched rows 1 2</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows 1 2</from><to>excluded</to><enabled>Y</enabled> </hop>  <hop> <from>Dummy (do nothing) 2</from><to>Database join</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows 1 3</from><to>Dummy (do nothing) 3</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows 1 2 2</from><to>Dummy (do nothing) 2 2</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows 1 3</from><to>excluded</to><enabled>Y</enabled> </hop>  <hop> <from>Regex Evaluation</from><to>Filter matched rows 1 3</to><enabled>Y</enabled> </hop>  <hop> <from>Regex Evaluation</from><to>Filter matched rows 1 2 2</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows 1 2 2</from><to>excluded</to><enabled>Y</enabled> </hop>  <hop> <from>Dummy (do nothing) 3</from><to>Database join</to><enabled>Y</enabled> </hop>  <hop> <from>Dummy (do nothing) 2 2</from><to>Database join</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows 1 2 2 2</from><to>Dummy (do nothing) 2 2 2</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows 1 3 2</from><to>Dummy (do nothing) 3 2</to><enabled>Y</enabled> </hop>  <hop> <from>Regex Evaluation</from><to>Filter matched rows 1 3 2</to><enabled>Y</enabled> </hop>  <hop> <from>Regex Evaluation</from><to>Filter matched rows 1 2 2 2</to><enabled>Y</enabled> </hop>  <hop> <from>Dummy (do nothing) 3 2</from><to>Database join</to><enabled>Y</enabled> </hop>  <hop> <from>Dummy (do nothing) 2 2 2</from><to>Database join</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows 1 3 2</from><to>excluded</to><enabled>Y</enabled> </hop>  <hop> <from>Filter matched rows 1 2 2 2</from><to>excluded</to><enabled>Y</enabled> </hop>  </order>
+  <hop> <from>CREATE TABLE</from><to>input-list</to><enabled>Y</enabled> </hop>  <hop> <from>Regex Match?</from><to>excluded</to><enabled>Y</enabled> </hop>  <hop> <from>Regex Match?</from><to>Actor Id</to><enabled>Y</enabled> </hop>  <hop> <from>Regex Evaluation</from><to>Regex Match?</to><enabled>Y</enabled> </hop>  <hop> <from>Select Actor Movie Values</from><to>Actor Movies</to><enabled>Y</enabled> </hop>  <hop> <from>input-list</from><to>Regex Evaluation</to><enabled>Y</enabled> </hop>  <hop> <from>Actor Movies</from><to>Rejected Actor Movies</to><enabled>Y</enabled> </hop>  <hop> <from>Actor Id</from><to>Actor Row?</to><enabled>Y</enabled> </hop>  <hop> <from>Actor Row?</from><to>Select Actor Movie Values</to><enabled>Y</enabled> </hop>  <hop> <from>Actor Row?</from><to>Dummy (do nothing)</to><enabled>Y</enabled> </hop>  <hop> <from>Select Actor Values</from><to>Actors</to><enabled>Y</enabled> </hop>  <hop> <from>Actors</from><to>Rejected Actors</to><enabled>Y</enabled> </hop>  <hop> <from>Dummy (do nothing)</from><to>Select Actor Movie Values</to><enabled>Y</enabled> </hop>  <hop> <from>Dummy (do nothing)</from><to>Select Actor Values</to><enabled>Y</enabled> </hop>  </order>
   <step>
     <name>CREATE TABLE</name>
     <type>ExecSQL</type>
@@ -87,23 +101,39 @@
     <connection>imbi_lists</connection>
     <execute_each_row>N</execute_each_row>
     <replace_variables>Y</replace_variables>
-    <sql>DROP TABLE IF EXISTS `${Internal.Transformation.Name}`
+    <sql>DROP TABLE IF EXISTS `actors`
 ;
 
-CREATE TABLE `${Internal.Transformation.Name}` (
-  line_text        varchar(255)      NOT NULL DEFAULT &apos;&apos;,
+CREATE TABLE `actors` (
+  line_text        varchar(512)      NOT NULL DEFAULT &apos;&apos;,
+  line_number      int unsigned      NOT NULL DEFAULT 0,
+  first_name       varchar(64)           NULL DEFAULT &apos;&apos;,
+  last_name        varchar(64)       NOT NULL DEFAULT &apos;&apos;,
+  primary key(line_number)
+)
+ENGINE=MyISAM
+DEFAULT CHARSET=latin1
+DEFAULT COLLATE=latin1_general_cs
+;
+
+DROP TABLE IF EXISTS `actor_movies`
+;
+
+CREATE TABLE `actor_movies` (
+  line_text        varchar(512)      NOT NULL DEFAULT &apos;&apos;,
   line_number      int unsigned      NOT NULL DEFAULT 0,
   actor_id         int unsigned      NOT NULL DEFAULT 0,
   movie_id         varchar(255)      NOT NULL DEFAULT 0,  
   extra            varchar(64)       DEFAULT &apos;&apos;,
-  character_name   varchar(128)      DEFAULT &apos;&apos;,
+  character_name   varchar(255)      DEFAULT &apos;&apos;,
   credits_position smallint unsigned  DEFAULT 0,
   unique(actor_id, movie_id, character_name, extra, credits_position)
 )
-ENGINE=MyISAM 
+ENGINE=MyISAM
 DEFAULT CHARSET=latin1
 DEFAULT COLLATE=latin1_general_cs
-;</sql>
+;
+</sql>
     <insert_field/>
     <update_field/>
     <delete_field/>
@@ -112,152 +142,14 @@ DEFAULT COLLATE=latin1_general_cs
     </arguments>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>54</xloc>
-      <yloc>84</yloc>
+      <xloc>65</xloc>
+      <yloc>111</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Database join</name>
-    <type>DBJoin</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>6</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <connection>imbi_lists</connection>
-    <rowlimit>0</rowlimit>
-    <sql>SELECT max(line_number) as actor_id
-FROM   actors
-WHERE  line_number &lt;= ?</sql>
-    <outer_join>N</outer_join>
-    <parameter>
-      <field>
-        <name>line_number</name>
-        <type>Integer</type>
-      </field>
-    </parameter>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>558</xloc>
-      <yloc>82</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Dummy (do nothing)</name>
-    <type>Dummy</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>448</xloc>
-      <yloc>83</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Dummy (do nothing) 2</name>
-    <type>Dummy</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>449</xloc>
-      <yloc>141</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Dummy (do nothing) 2 2</name>
-    <type>Dummy</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>449</xloc>
-      <yloc>266</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Dummy (do nothing) 2 2 2</name>
-    <type>Dummy</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>448</xloc>
-      <yloc>391</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Dummy (do nothing) 3</name>
-    <type>Dummy</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>448</xloc>
-      <yloc>208</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Dummy (do nothing) 3 2</name>
-    <type>Dummy</type>
-    <description/>
-    <distribute>Y</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>447</xloc>
-      <yloc>333</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Filter matched rows 1</name>
+    <name>Regex Match?</name>
     <type>FilterRows</type>
     <description/>
     <distribute>N</distribute>
@@ -266,7 +158,7 @@ WHERE  line_number &lt;= ?</sql>
            <method>none</method>
            <schema_name/>
            </partitioning>
-<send_true_to>Dummy (do nothing)</send_true_to>
+<send_true_to>Actor Id</send_true_to>
 <send_false_to>excluded</send_false_to>
     <compare>
 <condition>
@@ -278,148 +170,8 @@ WHERE  line_number &lt;= ?</sql>
     </compare>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>326</xloc>
-      <yloc>83</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Filter matched rows 1 2</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>N</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Dummy (do nothing) 2</send_true_to>
-<send_false_to>excluded</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>have_match</leftvalue>
- <function>=</function>
- <rightvalue/>
- <value><name>constant</name><type>Boolean</type><text>Y</text><length>-1</length><precision>-1</precision><isnull>N</isnull></value> </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>325</xloc>
-      <yloc>142</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Filter matched rows 1 2 2</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>N</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Dummy (do nothing) 2 2</send_true_to>
-<send_false_to>excluded</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>have_match</leftvalue>
- <function>=</function>
- <rightvalue/>
- <value><name>constant</name><type>Boolean</type><text>Y</text><length>-1</length><precision>-1</precision><isnull>N</isnull></value> </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>325</xloc>
-      <yloc>267</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Filter matched rows 1 2 2 2</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>N</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Dummy (do nothing) 2 2 2</send_true_to>
-<send_false_to>excluded</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>have_match</leftvalue>
- <function>=</function>
- <rightvalue/>
- <value><name>constant</name><type>Boolean</type><text>Y</text><length>-1</length><precision>-1</precision><isnull>N</isnull></value> </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>324</xloc>
-      <yloc>392</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Filter matched rows 1 3</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>N</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Dummy (do nothing) 3</send_true_to>
-<send_false_to>excluded</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>have_match</leftvalue>
- <function>=</function>
- <rightvalue/>
- <value><name>constant</name><type>Boolean</type><text>Y</text><length>-1</length><precision>-1</precision><isnull>N</isnull></value> </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>326</xloc>
-      <yloc>208</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Filter matched rows 1 3 2</name>
-    <type>FilterRows</type>
-    <description/>
-    <distribute>N</distribute>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<send_true_to>Dummy (do nothing) 3 2</send_true_to>
-<send_false_to>excluded</send_false_to>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue>have_match</leftvalue>
- <function>=</function>
- <rightvalue/>
- <value><name>constant</name><type>Boolean</type><text>Y</text><length>-1</length><precision>-1</precision><isnull>N</isnull></value> </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>325</xloc>
-      <yloc>333</yloc>
+      <xloc>337</xloc>
+      <yloc>110</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -429,7 +181,7 @@ WHERE  line_number &lt;= ?</sql>
     <type>RegexEval</type>
     <description/>
     <distribute>Y</distribute>
-    <copies>6</copies>
+    <copies>1</copies>
          <partitioning>
            <method>none</method>
            <schema_name/>
@@ -594,18 +346,18 @@ WHERE  line_number &lt;= ?</sql>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>216</xloc>
-      <yloc>84</yloc>
+      <xloc>227</xloc>
+      <yloc>111</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>Select Actor Movie values 1</name>
+    <name>Select Actor Movie Values</name>
     <type>SelectValues</type>
     <description/>
     <distribute>Y</distribute>
-    <copies>6</copies>
+    <copies>1</copies>
          <partitioning>
            <method>none</method>
            <schema_name/>
@@ -641,8 +393,8 @@ WHERE  line_number &lt;= ?</sql>
       </field>        <select_unspecified>N</select_unspecified>
     </fields>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>675</xloc>
-      <yloc>81</yloc>
+      <xloc>603</xloc>
+      <yloc>110</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -667,7 +419,7 @@ WHERE  line_number &lt;= ?</sql>
     <encoding/>
     <endedLine/>
     <file>
-      <name>${Internal.Transformation.Filename.Directory}${file.separator}..${file.separator}..${file.separator}excluded${file.separator}${Internal.Transformation.Name}</name>
+      <name>${Internal.Transformation.Filename.Directory}${file.separator}..${file.separator}..${file.separator}excluded${file.separator}actress_movies</name>
       <is_command>N</is_command>
       <do_not_open_new_file_init>N</do_not_open_new_file_init>
       <extention>txt</extention>
@@ -867,8 +619,8 @@ WHERE  line_number &lt;= ?</sql>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>172</xloc>
-      <yloc>263</yloc>
+      <xloc>337</xloc>
+      <yloc>208</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -928,7 +680,7 @@ WHERE  line_number &lt;= ?</sql>
         <nullif/>
         <ifnull/>
         <position>0</position>
-        <length>255</length>
+        <length>512</length>
         <precision>-1</precision>
         <trim_type>none</trim_type>
         <repeat>N</repeat>
@@ -950,14 +702,14 @@ WHERE  line_number &lt;= ?</sql>
     <date_format_locale>en_us</date_format_locale>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>130</xloc>
-      <yloc>85</yloc>
+      <xloc>141</xloc>
+      <yloc>112</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>rejected</name>
+    <name>Rejected Actor Movies</name>
     <type>TextFileOutput</type>
     <description/>
     <distribute>Y</distribute>
@@ -976,7 +728,7 @@ WHERE  line_number &lt;= ?</sql>
     <encoding/>
     <endedLine/>
     <file>
-      <name>${Internal.Transformation.Filename.Directory}${file.separator}..${file.separator}..${file.separator}rejected${file.separator}${Internal.Transformation.Name}</name>
+      <name>${Internal.Transformation.Filename.Directory}${file.separator}..${file.separator}..${file.separator}rejected${file.separator}actor_movies</name>
       <is_command>N</is_command>
       <do_not_open_new_file_init>N</do_not_open_new_file_init>
       <extention>txt</extention>
@@ -1074,7 +826,7 @@ WHERE  line_number &lt;= ?</sql>
         <group/>
         <nullif/>
         <trim_type>none</trim_type>
-        <length>9</length>
+        <length>16</length>
         <precision>0</precision>
       </field>
       <field>
@@ -1116,26 +868,26 @@ WHERE  line_number &lt;= ?</sql>
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>779</xloc>
-      <yloc>176</yloc>
+      <xloc>864</xloc>
+      <yloc>111</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step>
-    <name>table-output</name>
+    <name>Actor Movies</name>
     <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
-    <copies>6</copies>
+    <copies>2</copies>
          <partitioning>
            <method>none</method>
            <schema_name/>
            </partitioning>
     <connection>imbi_lists</connection>
     <schema/>
-    <table>${Internal.Transformation.Name}</table>
-    <commit>1000</commit>
+    <table>actor_movies</table>
+    <commit>20000</commit>
     <truncate>N</truncate>
     <ignore_errors>N</ignore_errors>
     <use_batch>Y</use_batch>
@@ -1150,16 +902,271 @@ WHERE  line_number &lt;= ?</sql>
     <return_field/>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>780</xloc>
-      <yloc>81</yloc>
+      <xloc>728</xloc>
+      <yloc>111</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Actor Id</name>
+    <type>ScriptValueMod</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <compatible>Y</compatible>
+    <jsScripts>      <jsScript>        <jsScript_type>0</jsScript_type>
+        <jsScript_name>Script 1</jsScript_name>
+        <jsScript_script>var first_row;
+var actor_id;
+
+if (last_name.getString()!=null) {
+    first_row = row;
+}
+actor_id = parseInt(first_row.getString(&quot;line_number&quot;,&quot;-&quot;));
+</jsScript_script>
+      </jsScript>    </jsScripts>    <fields>      <field>        <name>actor_id</name>
+        <rename>actor_id</rename>
+        <type>Integer</type>
+        <length>16</length>
+        <precision>2</precision>
+      </field>    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>423</xloc>
+      <yloc>111</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Actor Row?</name>
+    <type>FilterRows</type>
+    <description/>
+    <distribute>N</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+<send_true_to>Select Actor Movie Values</send_true_to>
+<send_false_to>Dummy (do nothing)</send_false_to>
+    <compare>
+<condition>
+ <negated>N</negated>
+ <leftvalue>last_name</leftvalue>
+ <function>IS NULL</function>
+ <rightvalue/>
+ </condition>
+    </compare>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>497</xloc>
+      <yloc>111</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Select Actor Values</name>
+    <type>SelectValues</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>      <field>        <name>line_text</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>line_number</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>last_name</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>      <field>        <name>first_name</name>
+        <rename/>
+        <length>-2</length>
+        <precision>-2</precision>
+      </field>        <select_unspecified>N</select_unspecified>
+    </fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>610</xloc>
+      <yloc>248</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Rejected Actors</name>
+    <type>TextFileOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <separator>;</separator>
+    <enclosure>&quot;</enclosure>
+    <enclosure_forced>N</enclosure_forced>
+    <header>Y</header>
+    <footer>N</footer>
+    <format>DOS</format>
+    <compression>None</compression>
+    <encoding/>
+    <endedLine/>
+    <file>
+      <name>${Internal.Transformation.Filename.Directory}${file.separator}..${file.separator}..${file.separator}rejected${file.separator}actors</name>
+      <is_command>N</is_command>
+      <do_not_open_new_file_init>N</do_not_open_new_file_init>
+      <extention>txt</extention>
+      <append>N</append>
+      <split>N</split>
+      <haspartno>N</haspartno>
+      <add_date>N</add_date>
+      <add_time>N</add_time>
+      <SpecifyFormat>N</SpecifyFormat>
+      <date_time_format/>
+      <add_to_result_filenames>Y</add_to_result_filenames>
+      <pad>N</pad>
+      <fast_dump>N</fast_dump>
+      <splitevery>0</splitevery>
+    </file>
+    <fields>
+      <field>
+        <name>line_text</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>255</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>line_number</name>
+        <type>Integer</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>10</length>
+        <precision>0</precision>
+      </field>
+      <field>
+        <name>last_name</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+      <field>
+        <name>first_name</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <nullif/>
+        <trim_type>none</trim_type>
+        <length>-1</length>
+        <precision>-1</precision>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>871</xloc>
+      <yloc>249</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Actors</name>
+    <type>TableOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <connection>imbi_lists</connection>
+    <schema/>
+    <table>actors</table>
+    <commit>20000</commit>
+    <truncate>N</truncate>
+    <ignore_errors>N</ignore_errors>
+    <use_batch>Y</use_batch>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_field/>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_field/>
+    <tablename_in_table>Y</tablename_in_table>
+    <return_keys>N</return_keys>
+    <return_field/>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>730</xloc>
+      <yloc>247</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Dummy (do nothing)</name>
+    <type>Dummy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>501</xloc>
+      <yloc>196</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
 
   <step_error_handling>
       <error>
-        <source_step>table-output</source_step>
-        <target_step>rejected</target_step>
+        <source_step>Actor Movies</source_step>
+        <target_step>Rejected Actor Movies</target_step>
+        <is_enabled>Y</is_enabled>
+        <nr_valuename/>
+        <descriptions_valuename>error_descriptions</descriptions_valuename>
+        <fields_valuename>error_fields</fields_valuename>
+        <codes_valuename>error_codes</codes_valuename>
+        <max_errors>-1</max_errors>
+        <max_pct_errors>-1</max_pct_errors>
+        <min_pct_rows>-1</min_pct_rows>
+      </error>
+      <error>
+        <source_step>Actors</source_step>
+        <target_step>Rejected Actors</target_step>
         <is_enabled>Y</is_enabled>
         <nr_valuename/>
         <descriptions_valuename>error_descriptions</descriptions_valuename>
